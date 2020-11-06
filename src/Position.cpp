@@ -4,6 +4,12 @@ Position::Position(int x, int y):_x(x),_y(y){}
 
 Position::~Position(){}
 
+Position::Position(const Position &pos)
+{
+    this->_x = pos._x;
+    this->_y = pos._y;
+}
+
 int Position::getPosX()const
 {
     return this->_x;
