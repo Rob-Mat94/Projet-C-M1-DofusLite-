@@ -1,13 +1,17 @@
 #include "../includes/Position.h"
 
-Position::Position(int x, int y):_x(x),_y(y){}
+Position::Position(int x, int y)
+{
+    setPosX(x);
+    setPosY(y);
+}
 
 Position::~Position(){}
 
 Position::Position(const Position &pos)
 {
-    this->_x = pos._x;
-    this->_y = pos._y;
+    setPosX(pos._x);
+    setPosY(pos._y);
 }
 
 int Position::getPosX()const

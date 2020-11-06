@@ -10,10 +10,13 @@ class Element
         Element(const Element& element);
         virtual ~Element();
 
-    protected:
-        Position _pos;
+        /* Héritage */
         virtual void setPosition(const Position &pos);
         virtual Position& getPosition();
+        virtual void element_action() = 0; // Action de l'élément 
+
+    protected:
+        Position _pos;
 };
 
 #endif
