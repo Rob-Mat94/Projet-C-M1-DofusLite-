@@ -11,7 +11,7 @@ void Element::setPosition(const Position &pos)
     this->_pos = pos;
 }
 
-Position& Element::getPosition()
+const Position& Element::getPosition()const
 {
     return this->_pos;
 }

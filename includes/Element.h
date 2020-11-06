@@ -12,7 +12,7 @@ class Element
 
         /* Héritage */
         virtual void setPosition(const Position &pos);
-        virtual Position& getPosition();
+        virtual const Position& getPosition()const;
         virtual void element_action() = 0; // Action de l'élément 
 
     protected:
