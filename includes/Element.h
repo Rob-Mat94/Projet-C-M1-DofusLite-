@@ -7,6 +7,7 @@ class Element
 {   
     public :
         Element(Position pos = Position(0,0));
+        Element(const Element& element);
         virtual ~Element();
 
     protected:
