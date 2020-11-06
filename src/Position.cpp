@@ -2,6 +2,8 @@
 
 Position::Position(int x, int y):_x(x),_y(y){}
 
+Position::~Position(){}
+
 int Position::getPosX()const
 {
     return this->_x;
