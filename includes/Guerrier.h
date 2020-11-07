@@ -23,6 +23,13 @@ class Guerrier : public Element
         int getCapDef()const{return this->_capDef;}
         void setCapDef(const int cD){this->_capDef = cD;}
 
+        /* Représentation (caractère pour l'instant) */
+        char getDraw(){
+            if(_team == "team 1")
+                return 'G';
+            else
+                return 'g';
+        }
 
     private:
         int _hp; 

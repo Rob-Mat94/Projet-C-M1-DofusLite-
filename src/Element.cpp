@@ -11,6 +11,12 @@ void Element::setPosition(const Position &pos)
     this->_pos = pos;
 }
 
+// représente ' '(vide) pour l'instant
+void Element :: element_action()
+{   
+
+}
+
 const Position& Element::getPosition()const
 {
     return this->_pos;

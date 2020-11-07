@@ -9,6 +9,9 @@ class Obstacle : public Element
         Obstacle(Position pos = Position(0,0));
         virtual ~Obstacle();
         void element_action();
+
+         /* Représentation (caractère pour l'instant) */
+        virtual char getDraw(){return '*';}
 };
 
 #endif
