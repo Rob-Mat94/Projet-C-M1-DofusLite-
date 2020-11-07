@@ -1,10 +1,10 @@
 #include "../includes/Obstacle.h"
 
-Obstacle::Obstacle(Position pos):Element(pos){}
+Obstacle::Obstacle(Position pos) : Element(pos) {}
 
-Obstacle::~Obstacle(){}
+Obstacle::~Obstacle() {}
 
 void Obstacle::element_action()
 {
-    /* TO DO */ 
+    /* TO DO */
 }

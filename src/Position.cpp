@@ -6,7 +6,7 @@ Position::Position(int x, int y)
     setPosY(y);
 }
 
-Position::~Position(){}
+Position::~Position() {}
 
 Position::Position(const Position &pos)
 {
@@ -14,24 +14,24 @@ Position::Position(const Position &pos)
     setPosY(pos._y);
 }
 
-int Position::getPosX()const
+int Position::getPosX() const
 {
     return this->_x;
 }
 
-int Position::getPosY()const
+int Position::getPosY() const
 {
     return this->_y;
 }
 
 void Position::setPosX(const int x)
 {
-    if(x >= 0)
+    if (x >= 0)
         this->_x = x;
 }
 
 void Position::setPosY(const int y)
 {
-    if(y >= 0)
+    if (y >= 0)
         this->_y = y;
 }

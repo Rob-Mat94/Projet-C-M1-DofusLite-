@@ -5,13 +5,13 @@
 
 class Obstacle : public Element
 {
-    public:
-        Obstacle(Position pos = Position(0,0));
-        virtual ~Obstacle();
-        void element_action();
+public:
+    Obstacle(Position pos = Position(0, 0));
+    virtual ~Obstacle();
+    void element_action();
 
-         /* Représentation (caractère pour l'instant) */
-        virtual char getDraw(){return '*';}
+    /* Représentation (caractère pour l'instant) */
+    virtual char getDraw() { return '*'; }
 };
 
 #endif

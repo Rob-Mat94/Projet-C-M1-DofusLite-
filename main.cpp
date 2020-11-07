@@ -1,5 +1,3 @@
-#include <iostream>
-#include <vector>
 #include "includes/Guerrier.h"
 #include "includes/Obstacle.h"
 #include "includes/Position.h"
