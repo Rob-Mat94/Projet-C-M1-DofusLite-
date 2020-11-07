@@ -1,0 +1,11 @@
+# Fichiers et dossier à ne pas mettre sur git
+
+#Tout fichier .o ou .out
+*.o
+*.out
+
+# Dossier des .o
+**/obj
+
+# Dossier des executables
+**/bin
