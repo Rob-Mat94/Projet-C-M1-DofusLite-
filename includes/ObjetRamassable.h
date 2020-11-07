@@ -10,6 +10,9 @@ class ObjetRamassable : public Element
         void element_action();
 
         const int getHpToGive()const{return _hp_to_give;}
+
+         /* Représentation (caractère pour l'instant) */
+         char getDraw(){return _hp_to_give+'0';}
     private:
         const int _hp_to_give;
 };

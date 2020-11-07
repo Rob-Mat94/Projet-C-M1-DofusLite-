@@ -13,7 +13,10 @@ class Element
         /* Héritage */
         virtual void setPosition(const Position &pos);
         virtual const Position& getPosition()const;
-        virtual void element_action() = 0; // Action de l'élément 
+        virtual void element_action(); // Action de l'élément 
+        /* Représentation (caractère pour l'instant) */
+        virtual char getDraw(){return ' ';}
+
 
     protected:
         Position _pos;
