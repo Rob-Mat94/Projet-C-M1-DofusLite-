@@ -9,7 +9,8 @@
 class Guerrier : public Element
 {
 public:
-    Guerrier(const std::string equipe, Position pos = Position(0, 0), int hp = 100, std::string name = "default", int capAttack = 50, int capDef = 50);
+    Guerrier(const std::string equipe, Position pos = Position(0, 0),
+             int hp = 100, std::string name = "default", int capAttack = 50, int capDef = 50);
     virtual ~Guerrier();
     void element_action();
 

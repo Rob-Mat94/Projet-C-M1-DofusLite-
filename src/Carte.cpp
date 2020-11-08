@@ -24,26 +24,54 @@ Carte::Carte(std::string file_name)
         std::cerr << "Fichier Introuvable" << std::endl;
 }
 
+Carte::~Carte()
+{
+    for (const auto &tab : this->_map)
+    {
+        for (const auto &element : tab)
+        {
+            if (element != nullptr)
+            {
+                delete element;
+            }
+        }
+    }
+}
+
 void Carte ::init_map(std::ifstream &f)
 {
     std::string line = "";
     int y = 0;
     while (getline(f, line))
     {
-        for (int i(0); i < _width; i++)
+        for (int x(0); x < _width; x++)
         {
-            if (line[i] == '*')
-                this->_map[y][i] = new Obstacle(Position(i, y));
-            else if (line[i] == 'g')
-                this->_map[y][i] = new Guerrier("team 2", Position(i, y));
-            else if (line[i] == 'G')
-                this->_map[y][i] = new Guerrier("team 1", Position(i, y));
-            else if (line[i] == ' ')
-                this->_map[y][i] = new Element(Position(i, y));
-            else if (line[i] >= '0' && line[i] <= '9')
-                this->_map[y][i] = new ObjetRamassable(line[i] - 48, Position(i, y));
-            else
-                std::cerr << "Erreur dans .txt" << std::endl;
+            switch (line[x])
+            {
+            case '*':
+                addElement(new Obstacle(Position(x, y)));
+                break;
+            case 'g':
+                addElement(new Guerrier("team 2", Position(x, y)));
+                break;
+            case 'G':
+                addElement(new Guerrier("team 1", Position(x, y)));
+                break;
+            case ' ':
+                addElement(new Element(Position(x, y)));
+                break;
+            default:
+                if (line[x] >= '0' && line[x] <= '9')
+                {
+                    addElement(new ObjetRamassable(line[x] - 48, Position(x, y)));
+                }
+                else
+                {
+                    std::cerr << "Erreur dans .txt" << std::endl;
+                    exit(1);
+                }
+                break;
+            }
         }
         y++;
     }
@@ -61,16 +89,12 @@ void Carte::printMap() const
     }
 }
 
-Carte::~Carte()
+void Carte::addElement(Element *e)
 {
-    for (const auto &tab : this->_map)
+    if (e != nullptr)
     {
-        for (const auto &element : tab)
-        {
-            if (element != nullptr)
-            {
-                delete element;
-            }
-        }
+        int x(e->getPosition().getPosX()),
+            y(e->getPosition().getPosY());
+        _map[y][x] = e;
     }
 }

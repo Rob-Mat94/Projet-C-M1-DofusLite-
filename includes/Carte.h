@@ -4,7 +4,6 @@
 #include "Element.h"
 #include <vector>
 #include <fstream>
-#include <memory>
 
 class Carte
 {
@@ -15,6 +14,8 @@ public:
 
     const int getWidth() const { return this->_width; }
     const int getHeight() const { return this->_height; }
+
+    void addElement(Element *e);
 
     void printMap() const;
 

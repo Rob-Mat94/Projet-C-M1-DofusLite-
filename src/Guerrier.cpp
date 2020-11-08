@@ -9,3 +9,4 @@ void Guerrier::element_action()
 {
     /* TO DO */
 }
+
