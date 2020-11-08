@@ -12,4 +12,4 @@ struct Coordinate
     int y;
 };
 
-Coordinate getDirCoordate(Direction dir);
+Coordinate getDirCoordinate(Direction dir);

@@ -1,11 +1,13 @@
 #ifndef GUERRIER_H
 #define GUERRIER_H
 
-#include "Position.h"
 #include "Element.h"
 #include <string>
 #include <iostream>
+#include "Direction.h"
+#include "Carte.h"
 
+class Carte;
 class Guerrier : public Element
 {
 public:
@@ -14,7 +16,10 @@ public:
     virtual ~Guerrier();
     bool element_action();
 
-    bool estAdversaire(Guerrier* g);
+    bool estAdversaire(Guerrier *g);
+
+    //test move
+    bool move(Direction dir, Carte &c);
 
     /***  G / S  ***/
     const int getHp() const { return this->_hp; }

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../includes/Direction.h"
 
-Coordinate getDirCoordate(Direction dir)
+Coordinate getDirCoordinate(Direction dir)
 {
     int x(0), y(0);
 

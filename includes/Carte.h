@@ -7,8 +7,8 @@
 #include "Obstacle.h"
 #include <vector>
 #include <fstream>
-#include "Direction.h"
-#include <memory>
+
+class Guerrier;
 
 class Carte
 {
@@ -24,11 +24,14 @@ public:
     void printMap() const;
 
     /* Polymorphisme à voir */
-    bool can_Move(Guerrier* g, Direction &d);
-    void moveG(Guerrier* g, Direction& d);
-    bool canPick_up(Guerrier * g, ObjetRamassable* obj_r);
-    void Pick_up(Guerrier * g);
+    bool can_Move(Guerrier *g, Direction &d);
+    void moveG(Guerrier *g, Direction &d);
+    bool canPick_up(Guerrier *g, ObjetRamassable *obj_r);
+    void Pick_up(Guerrier *g);
 
+    //test move guerrier
+    bool updatePos(Position oldPos, Position newPos);
+    Guerrier *guerrier;
 
 private:
     void init_map(std::ifstream &f);
