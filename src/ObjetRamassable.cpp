@@ -4,7 +4,7 @@ ObjetRamassable::ObjetRamassable(const int hp, Position pos) : Element(pos), _hp
 
 ObjetRamassable::~ObjetRamassable() {}
 
-void ObjetRamassable::element_action()
+bool ObjetRamassable::element_action()
 {
-    /* TO DO */
+    return true;
 }

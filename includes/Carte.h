@@ -2,8 +2,10 @@
 #define CARTE_H
 
 #include "Element.h"
+#include "Guerrier.h"
 #include <vector>
 #include <fstream>
+#include "Direction.h"
 
 class Carte
 {
@@ -16,8 +18,12 @@ public:
     const int getHeight() const { return this->_height; }
 
     void addElement(Element *e);
-
     void printMap() const;
+
+    /* Polymorphisme à voir */
+    bool can_Move(Guerrier* g, Direction &d);
+    void moveG(Guerrier* g, Direction& d);
+
 
 private:
     void init_map(std::ifstream &f);

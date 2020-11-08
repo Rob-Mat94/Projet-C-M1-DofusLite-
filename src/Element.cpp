@@ -12,8 +12,9 @@ void Element::setPosition(const Position &pos)
 }
 
 // représente ' '(vide) pour l'instant
-void Element ::element_action()
+bool Element ::element_action()
 {
+    return false;
 }
 
 const Position &Element::getPosition() const

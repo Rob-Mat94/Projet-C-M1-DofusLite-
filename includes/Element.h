@@ -13,7 +13,7 @@ public:
     /* Héritage */
     virtual void setPosition(const Position &pos);
     virtual const Position &getPosition() const;
-    virtual void element_action(); // Action de l'élément
+    virtual bool element_action(); // Action de l'élément
     /* Représentation (caractère pour l'instant) */
     virtual char getDraw() { return ' '; }
 

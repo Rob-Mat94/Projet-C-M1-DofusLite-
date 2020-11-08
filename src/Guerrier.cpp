@@ -5,8 +5,7 @@ Guerrier::Guerrier(const std::string team, Position pos, int hp, std::string nam
 
 Guerrier::~Guerrier() {}
 
-void Guerrier::element_action()
+bool Guerrier::element_action()
 {
-    /* TO DO */
+    return true;
 }
-

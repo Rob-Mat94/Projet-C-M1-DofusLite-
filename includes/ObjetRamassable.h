@@ -7,7 +7,7 @@ class ObjetRamassable : public Element
 public:
     ObjetRamassable(const int hp, Position pos = Position(0, 0));
     virtual ~ObjetRamassable();
-    void element_action();
+    bool element_action();
 
     const int getHpToGive() const { return _hp_to_give; }
 

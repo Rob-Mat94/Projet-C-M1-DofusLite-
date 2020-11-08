@@ -12,7 +12,7 @@ public:
     Guerrier(const std::string equipe, Position pos = Position(0, 0),
              int hp = 100, std::string name = "default", int capAttack = 50, int capDef = 50);
     virtual ~Guerrier();
-    void element_action();
+    bool element_action();
 
     /***  G / S  ***/
     const int getHp() const { return this->_hp; }
