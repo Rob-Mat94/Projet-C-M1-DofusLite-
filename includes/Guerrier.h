@@ -2,7 +2,6 @@
 #define GUERRIER_H
 
 #include "Element.h"
-#include <string>
 #include <iostream>
 #include "Direction.h"
 #include "Carte.h"
@@ -14,7 +13,10 @@ public:
     Guerrier(const std::string equipe, Position pos = Position(0, 0),
              int hp = 100, std::string name = "default", int capAttack = 50, int capDef = 50);
     virtual ~Guerrier();
-    bool element_action();
+
+    virtual bool element_action();
+    virtual bool isEmpty() { return false; }
+    virtual bool isPickable() { return false; }
 
     bool estAdversaire(Guerrier *g);
 
@@ -23,7 +25,7 @@ public:
 
     /***  G / S  ***/
     const int getHp() const { return this->_hp; }
-    void setHp(const int hp) { this->_hp = hp; }
+    void setHp(const int hp) { this->_hp += hp; }
     const std::string getName() const { return this->_name; }
     const std::string getTeam() const { return this->_team; }
     int getCapAttack() const { return this->_capAttack; }

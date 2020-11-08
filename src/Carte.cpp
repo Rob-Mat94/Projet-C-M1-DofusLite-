@@ -1,7 +1,5 @@
 #include <iostream>
 #include "../includes/Carte.h"
-#include "../includes/Obstacle.h"
-#include "../includes/ObjetRamassable.h"
 
 Carte::Carte() : _width(0), _height(0), _map() {}
 
@@ -20,7 +18,10 @@ Carte::Carte(std::string file_name)
         init_map(file_map);
     }
     else
+    {
         std::cerr << "Fichier Introuvable" << std::endl;
+        exit(1);
+    }
 }
 
 Carte::~Carte()
@@ -126,11 +127,31 @@ void Carte::moveG(Guerrier *g, Direction &d)
     this->_map[old_p.getPosY()][old_p.getPosX()] = old;
 }
 
-bool Carte::updatePos(Position oldPos, Position newPos)
+bool Carte::canMove(Position oldPos, Position newPos)
 {
-    Element *tmp = _map[oldPos.getPosY()][oldPos.getPosX()];
-    _map[oldPos.getPosY()][oldPos.getPosX()] = new Element(oldPos);
-    delete _map[newPos.getPosY()][newPos.getPosX()];
-    _map[newPos.getPosY()][newPos.getPosX()] = tmp;
+    int x(newPos.getPosX()), y(newPos.getPosY()),
+        x2(oldPos.getPosX()), y2(oldPos.getPosY());
+
+    if (x >= _width || y >= _height || x2 >= _width || y2 >= _height)
+        return false;
+
+    return _map[y][x]->isEmpty();
+}
+
+bool Carte::updatePos(Guerrier *g, Position oldPos, Position newPos)
+{
+    if (!canMove(oldPos, newPos))
+        return false;
+
+    int x(newPos.getPosX()), y(newPos.getPosY()),
+        x2(oldPos.getPosX()), y2(oldPos.getPosY());
+
+    Element *tmp = _map[y2][x2];
+    Element *e = _map[y][x];
+    addElement(new Element(oldPos));
+    if (e->isPickable())
+        ((ObjetRamassable *)e)->pickUp(g);
+    delete e;
+    _map[y][x] = tmp;
     return true;
 }

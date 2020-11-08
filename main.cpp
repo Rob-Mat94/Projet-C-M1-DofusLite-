@@ -3,14 +3,16 @@
 int main()
 {
     Carte c("carte1.txt");
-    std::cout << "Appuyez sur 'e' pour quitter" << std::endl;
-    while (true)
+    bool exit = false;
+    while (!exit)
     {
         system("clear");
+        std::cout << "Appuyez sur 'e' pour quitter, z,q,s,d pour bouger G" << std::endl;
+        std::cout << "G: hp -> " << c.guerrier->getHp() << "\n";
         c.printMap();
-        char dir;
+        std::string dir;
         std::cin >> dir;
-        switch (dir)
+        switch (dir.at(0))
         {
         case 'z':
             c.guerrier->move(Up, c);
@@ -25,7 +27,7 @@ int main()
             c.guerrier->move(Right, c);
             break;
         case 'e':
-            exit(0);
+            exit = true;
             break;
         default:
             break;

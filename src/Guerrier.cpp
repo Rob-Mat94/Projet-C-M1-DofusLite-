@@ -11,6 +11,7 @@ bool Guerrier::estAdversaire(Guerrier *g)
         return false;
     return true;
 }
+
 bool Guerrier::element_action()
 {
     return true;
@@ -18,12 +19,15 @@ bool Guerrier::element_action()
 
 bool Guerrier::move(Direction dir, Carte &carte)
 {
-    Position oldPos = this->_pos;
     Coordinate c = getDirCoordinate(dir);
+    Position oldPos = this->_pos;
+    Position newPos = Position(_pos.getPosX() + c.x, _pos.getPosY() + c.y);
 
-    _pos.setPosX(_pos.getPosX() + c.x);
-    _pos.setPosY(_pos.getPosY() + c.y);
-    Position newPos = this->_pos;
+    if (carte.updatePos(this, oldPos, newPos))
+    {
+        setPosition(newPos);
+        return true;
+    }
 
-    return carte.updatePos(oldPos, newPos);
+    return false;
 }

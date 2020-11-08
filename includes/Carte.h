@@ -3,8 +3,8 @@
 
 #include "Element.h"
 #include "Guerrier.h"
-#include "ObjetRamassable.h"
 #include "Obstacle.h"
+#include "ObjetRamassable.h"
 #include <vector>
 #include <fstream>
 
@@ -26,11 +26,13 @@ public:
     /* Polymorphisme à voir */
     bool can_Move(Guerrier *g, Direction &d);
     void moveG(Guerrier *g, Direction &d);
-    bool canPick_up(Guerrier *g, ObjetRamassable *obj_r);
+    //bool canPick_up(Guerrier *g, ObjetRamassable *obj_r);
     void Pick_up(Guerrier *g);
 
+    bool canMove(Position oldPos, Position newPos);
+
     //test move guerrier
-    bool updatePos(Position oldPos, Position newPos);
+    bool updatePos(Guerrier *g, Position oldPos, Position newPos);
     Guerrier *guerrier;
 
 private:

@@ -8,3 +8,8 @@ bool ObjetRamassable::element_action()
 {
     return true;
 }
+
+void ObjetRamassable::pickUp(Guerrier *g)
+{
+    g->setHp(_hp_to_give);
+}

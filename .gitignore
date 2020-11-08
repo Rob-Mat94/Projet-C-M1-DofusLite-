@@ -9,3 +9,4 @@
 
 # Dossier des executables
 **/bin
+.vscode/settings.json
