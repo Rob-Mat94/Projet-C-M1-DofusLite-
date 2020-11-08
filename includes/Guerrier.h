@@ -14,6 +14,8 @@ public:
     virtual ~Guerrier();
     bool element_action();
 
+    bool estAdversaire(Guerrier* g);
+
     /***  G / S  ***/
     const int getHp() const { return this->_hp; }
     void setHp(const int hp) { this->_hp = hp; }

@@ -5,6 +5,12 @@ Guerrier::Guerrier(const std::string team, Position pos, int hp, std::string nam
 
 Guerrier::~Guerrier() {}
 
+bool Guerrier::estAdversaire(Guerrier* g)
+{
+    if(g->getTeam() == this->_team)
+        return false;
+    return true;
+}
 bool Guerrier::element_action()
 {
     return true;

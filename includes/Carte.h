@@ -3,9 +3,12 @@
 
 #include "Element.h"
 #include "Guerrier.h"
+#include "ObjetRamassable.h"
+#include "Obstacle.h"
 #include <vector>
 #include <fstream>
 #include "Direction.h"
+#include <memory>
 
 class Carte
 {
@@ -23,6 +26,8 @@ public:
     /* Polymorphisme à voir */
     bool can_Move(Guerrier* g, Direction &d);
     void moveG(Guerrier* g, Direction& d);
+    bool canPick_up(Guerrier * g, ObjetRamassable* obj_r);
+    void Pick_up(Guerrier * g);
 
 
 private:

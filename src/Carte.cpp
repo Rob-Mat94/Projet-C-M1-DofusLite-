@@ -27,12 +27,9 @@ Carte::Carte(std::string file_name)
 
 Carte::~Carte()
 {
-    for (const auto &tab : this->_map)
-    {
-        for (const auto &element : tab)
-        {
-            if (element != nullptr)
-            {   
+    for (const auto &tab : this->_map){
+        for (const auto &element : tab){
+            if (element != nullptr) {   
                 delete element;
             }
         }
@@ -62,12 +59,10 @@ void Carte ::init_map(std::ifstream &f)
                 addElement(new Element(Position(x, y)));
                 break;
             default:
-                if (line[x] >= '0' && line[x] <= '9')
-                {
+                if (line[x] >= '0' && line[x] <= '9') {
                     addElement(new ObjetRamassable(line[x] - 48, Position(x, y)));
                 }
-                else
-                {
+                else{
                     std::cerr << "Erreur dans .txt" << std::endl;
                     exit(1);
                 }
@@ -99,7 +94,6 @@ void Carte::addElement(Element *e)
         _map[y][x] = e;
     }
 }
-
 
 bool Carte::can_Move(Guerrier * g, Direction& d)
 {    
