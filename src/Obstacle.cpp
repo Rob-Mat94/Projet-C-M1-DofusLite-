@@ -6,5 +6,5 @@ Obstacle::~Obstacle() {}
 
 bool Obstacle::element_action()
 {
-    return true;
+    return false;
 }

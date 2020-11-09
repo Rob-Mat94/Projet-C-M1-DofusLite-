@@ -23,21 +23,21 @@ public:
     void addElement(Element *e);
     void printMap() const;
 
-    /* Polymorphisme à voir */
-    bool can_Move(Guerrier *g, Direction &d);
-    void moveG(Guerrier *g, Direction &d);
-    //bool canPick_up(Guerrier *g, ObjetRamassable *obj_r);
     void Pick_up(Guerrier *g);
-
     bool canMove(Position oldPos, Position newPos);
 
-    //test move guerrier
     bool updatePos(Guerrier *g, Position oldPos, Position newPos);
-    Guerrier *guerrier;
+
+    static auto& getTeam_1(){return _team_1;}
+    static auto& getTeam_2(){return _team_2;}
+
+    Guerrier* CheckEnemy(Guerrier* g);
 
 private:
-    void init_map(std::ifstream &f);
+    static std::vector<Guerrier*> _team_1;
+    static std::vector<Guerrier*> _team_2;
 
+    void init_map(std::ifstream &f);
     int _width;
     int _height;
     std::vector<std::vector<Element *>> _map;

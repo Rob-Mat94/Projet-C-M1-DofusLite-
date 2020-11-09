@@ -6,7 +6,7 @@ ObjetRamassable::~ObjetRamassable() {}
 
 bool ObjetRamassable::element_action()
 {
-    return true;
+    return false;
 }
 
 void ObjetRamassable::pickUp(Guerrier *g)
