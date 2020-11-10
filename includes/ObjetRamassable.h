@@ -14,12 +14,11 @@ public:
 
     const int getHpToGive() const { return _hp_to_give; }
 
+    /* Méthodes héritées */
     /* Représentation (caractère pour l'instant) */
     char getDraw() { return _hp_to_give + '0'; }
-    virtual bool isEmpty() { return true; }
-    virtual bool isPickable(){ return true; }
-
-    virtual void pickUp(Guerrier *g);
+    bool isEmpty() { return true; }
+    void pickUpElement(Guerrier *g);
 
 private:
     const int _hp_to_give;

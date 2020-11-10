@@ -9,7 +9,7 @@ bool ObjetRamassable::element_action()
     return false;
 }
 
-void ObjetRamassable::pickUp(Guerrier *g)
+void ObjetRamassable::pickUpElement(Guerrier *g)
 {
     g->setHp(_hp_to_give);
 }

@@ -10,10 +10,11 @@ public:
     virtual ~Obstacle();
     virtual bool element_action();
 
+    /* Méthodes héritées */
     /* Représentation (caractère pour l'instant) */
-    virtual char getDraw() { return '*'; }
-    virtual bool isEmpty() { return false; }
-    virtual bool isPickable() { return false; }
+    char getDraw() { return '*'; }
+    bool isEmpty() { return false; }
+
 };
 
 #endif

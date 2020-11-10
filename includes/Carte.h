@@ -23,9 +23,7 @@ public:
     void addElement(Element *e);
     void printMap() const;
 
-    void Pick_up(Guerrier *g);
     bool canMove(Position oldPos, Position newPos);
-
     bool updatePos(Guerrier *g, Position oldPos, Position newPos);
 
     static auto& getTeam_1(){return _team_1;}

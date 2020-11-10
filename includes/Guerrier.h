@@ -14,15 +14,18 @@ public:
              int hp = 100, std::string name = "default", int capAttack = 50, int capDef = 50);
     virtual ~Guerrier();
 
-    virtual bool element_action();
-    virtual bool isEmpty() { return false; }
-    virtual bool isPickable() { return false; }
+    bool operator==(const Guerrier &g)const;
+
+    /* Méthodes héritées */
+    bool element_action();
+    bool isEmpty() { return false; }
+    /* Représentation (caractère pour l'instant) */
+    char getDraw();
+
+    /****************/
 
     bool estAdversaire(Guerrier *g);
-
-    //test move
     bool move(Direction dir, Carte &c);
-
     /***  G / S  ***/
     const int getHp() const { return this->_hp; }
     void setHp(const int hp) { this->_hp += hp; }
@@ -32,15 +35,6 @@ public:
     void setCapAttack(const int cA) { this->_capAttack = cA; }
     int getCapDef() const { return this->_capDef; }
     void setCapDef(const int cD) { this->_capDef = cD; }
-
-    /* Représentation (caractère pour l'instant) */
-    char getDraw()
-    {
-        if (_team == "team 1")
-            return 'G';
-        else
-            return 'g';
-    }
 
 private:
     int _hp;

@@ -14,6 +14,13 @@ Position::Position(const Position &pos)
     setPosY(pos._y);
 }
 
+bool Position::operator==(const Position &p)const
+{
+    if(this->_x == p._x && this->_y == p._y)
+        return true;
+    return false;
+}
+
 int Position::getPosX() const
 {
     return this->_x;

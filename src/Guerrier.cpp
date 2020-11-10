@@ -11,6 +11,20 @@ bool Guerrier::estAdversaire(Guerrier *g)
         return false;
     return true;
 }
+char Guerrier::getDraw()
+{
+    if (_team == "team 1")
+         return 'G';
+    else
+         return 'g';
+}
+
+bool Guerrier::operator==(const Guerrier &g)const
+{
+    if(this->_pos == g._pos)
+        return true;
+    return false;
+}
 
 bool Guerrier::element_action()
 {
