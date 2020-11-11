@@ -1,28 +1,27 @@
 #include "includes/Carte.h"
+#include "includes/terminalSetting.h"
 
 /* déterminer l'équipe courante qui joue */
-auto getTeam = [] (int &index) -> auto 
+auto getTeam = [](int &index) -> auto
 {
-    if(index % 2 == 0)
+    if (index % 2 == 0)
         return Carte::getTeam_2();
-    return Carte::getTeam_1();    
+    return Carte::getTeam_1();
 };
 
-auto printInfo = [] (int &team_index, int &index_g) -> void
-{
+auto printInfo = [](int &team_index, int &index_g) -> void {
     std::cout << "Appuyez sur 'e' pour quitter, z,q,s,d pour bouger" << std::endl;
     /* Information sur le guerrier courant */
-    std::cout << getTeam(team_index)[index_g]->getName() << ": hp -> " <<  getTeam(team_index)[index_g]->getHp() << " Team : " <<
-         getTeam(team_index)[index_g]->getTeam() << "\n";
+    std::cout << getTeam(team_index)[index_g]->getName() << ": hp -> " << getTeam(team_index)[index_g]->getHp() << " Team : " << getTeam(team_index)[index_g]->getTeam() << "\n";
 };
 
-auto printEnemyInfo = [](Guerrier* enemy) -> void
-{
-    if(enemy != nullptr)
-        {
-            std::cout << "##################\n" << "Name : " << enemy->getName() << " / Equipe : " << enemy->getTeam()
-            << " / (Attack : " << enemy->getCapAttack() << " / Def : " << enemy->getCapDef() <<")\n##################\n"; 
-        }
+auto printEnemyInfo = [](Guerrier *enemy) -> void {
+    if (enemy != nullptr)
+    {
+        std::cout << "##################\n"
+                  << "Name : " << enemy->getName() << " / Equipe : " << enemy->getTeam()
+                  << " / (Attack : " << enemy->getCapAttack() << " / Def : " << enemy->getCapDef() << ")\n##################\n";
+    }
 };
 
 int main()
@@ -32,24 +31,25 @@ int main()
 
     auto index_g = 0;
     int team_index = 1;
-     
-    Guerrier* enemy = nullptr;
+
+    Guerrier *enemy = nullptr;
     const int team_size = getTeam(index_g).size();
 
-
+    initSettings();
     while (!exit)
     {
-        if(system("clear") == -1)std::cerr << "Erreur";
-        
+        if (system("clear") == -1)
+            std::cerr << "Erreur";
+
         /* information sur le guerrier actuel */
-        printInfo(team_index,index_g);
+        printInfo(team_index, index_g);
         /* information sur un enemy proche */
         printEnemyInfo(enemy);
-        
+
         c.printMap();
-        std::string dir;
-        std::cin >> dir;
-        switch (dir.at(0))
+        // std::string dir;
+        // std::cin >> dir;
+        switch (getKey())
         {
         case 'z':
             getTeam(team_index)[index_g]->move(Up, c);
@@ -58,17 +58,17 @@ int main()
             break;
         case 's':
             getTeam(team_index)[index_g]->move(Down, c);
-             // check enemy
+            // check enemy
             enemy = c.CheckEnemy(getTeam(team_index)[index_g]);
             break;
         case 'q':
             getTeam(team_index)[index_g]->move(Left, c);
-             // check enemy
+            // check enemy
             enemy = c.CheckEnemy(getTeam(team_index)[index_g]);
             break;
         case 'd':
             getTeam(team_index)[index_g]->move(Right, c);
-             // check enemy
+            // check enemy
             enemy = c.CheckEnemy(getTeam(team_index)[index_g]);
             break;
         case 'e':
@@ -76,15 +76,17 @@ int main()
             break;
         /* passe le tour au membre suivant de l'autre équipe */
         case 't':
-            if(team_index % 2 == 0)
+            if (team_index % 2 == 0)
                 index_g++;
             team_index++;
-            if(index_g == team_size)
-                index_g = 0;           
+            if (index_g == team_size)
+                index_g = 0;
             break;
         default:
             break;
         }
     }
+
+    restoreSettings();
     return 0;
 }
