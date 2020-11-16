@@ -23,15 +23,16 @@ public:
     char getDraw();
 
     /****************/
+    bool Attack(Guerrier* g);
 
     bool estAdversaire(Guerrier *g);
     bool move(Direction dir, Carte &c);
     /***  G / S  ***/
     const int getHp() const { return this->_hp; }
-    void setHp(const int hp) { this->_hp += hp; }
+    void setHp(const int hp) { this->_hp = hp; }
     const std::string getName() const { return this->_name; }
     const std::string getTeam() const { return this->_team; }
-    int getCapAttack() const { return this->_capAttack; }
+    const int getCapAttack() const { return this->_capAttack; }
     void setCapAttack(const int cA) { this->_capAttack = cA; }
     int getCapDef() const { return this->_capDef; }
     void setCapDef(const int cD) { this->_capDef = cD; }

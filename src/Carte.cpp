@@ -2,6 +2,9 @@
 #include "../includes/Carte.h"
 #include <algorithm>
 #include <memory>
+#include "../includes/AttackObject.h"
+#include "../includes/ADobjets/BasicSword.h"
+#include "../includes/ADobjets/BasicArmor.h"
 std::vector<Guerrier*> Carte::_team_1{};
 std::vector<Guerrier*> Carte::_team_2{};
 
@@ -61,6 +64,12 @@ void Carte ::init_map(std::ifstream &f)
             case 'g':
                 addElement(new Guerrier("team 2", Position(x, y)));
                 _team_2.push_back(dynamic_cast<Guerrier*>(_map[y][x]));
+                break;
+            case 'S':
+                addElement(new BasicSword(15,Position(x,y)));
+                break;
+            case 'A':
+                addElement(new BasicArmor(20,Position(x,y)));
                 break;
             case 'G':
                 addElement(new Guerrier("team 1", Position(x, y)));

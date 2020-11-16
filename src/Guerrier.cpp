@@ -19,6 +19,12 @@ char Guerrier::getDraw()
          return 'g';
 }
 
+bool Guerrier::Attack(Guerrier *g)
+{
+    g->setHp(g->getHp() - this->_capAttack + g->getCapDef()/3);
+    return true;
+}
+
 bool Guerrier::operator==(const Guerrier &g)const
 {
     if(this->_pos == g._pos)
