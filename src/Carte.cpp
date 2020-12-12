@@ -1,12 +1,14 @@
 #include <iostream>
-#include "../includes/Carte.h"
 #include <algorithm>
 #include <memory>
-#include "../includes/AttackObject.h"
-#include "../includes/ADobjets/BasicSword.h"
-#include "../includes/ADobjets/BasicArmor.h"
-std::vector<Guerrier*> Carte::_team_1{};
-std::vector<Guerrier*> Carte::_team_2{};
+
+#include "../includes/Carte.h"
+#include "../includes/Sword.h"
+#include "../includes/Armor.h"
+#include "../includes/Potion.h"
+
+std::vector<Guerrier *> Carte::_team_1{};
+std::vector<Guerrier *> Carte::_team_2{};
 
 Carte::Carte() : _width(0), _height(0), _map() {}
 
@@ -18,8 +20,8 @@ Carte::Carte(std::string file_name)
         file_map >> this->_width;
         file_map >> this->_height;
 
-        std::vector<Element*> temp_vec;
-        for(int i = 0; i < _width ; i++)
+        std::vector<Element *> temp_vec;
+        for (int i = 0; i < _width; i++)
             temp_vec.push_back(0);
         for (int i = 0; i < this->_height; i++)
             this->_map.push_back(temp_vec);
@@ -55,7 +57,7 @@ void Carte ::init_map(std::ifstream &f)
     while (getline(f, line))
     {
         for (int x(0); x < _width; x++)
-        {   
+        {
             switch (line[x])
             {
             case '*':
@@ -63,24 +65,24 @@ void Carte ::init_map(std::ifstream &f)
                 break;
             case 'g':
                 addElement(new Guerrier("team 2", Position(x, y)));
-                _team_2.push_back(dynamic_cast<Guerrier*>(_map[y][x]));
+                _team_2.push_back(dynamic_cast<Guerrier *>(_map[y][x]));
                 break;
             case 'S':
-                addElement(new BasicSword(15,Position(x,y)));
+                addElement(new Sword(15, Position(x, y)));
                 break;
             case 'A':
-                addElement(new BasicArmor(20,Position(x,y)));
+                addElement(new Armor(20, Position(x, y)));
                 break;
             case 'G':
                 addElement(new Guerrier("team 1", Position(x, y)));
-                _team_1.push_back(dynamic_cast<Guerrier*>(_map[y][x]));
+                _team_1.push_back(dynamic_cast<Guerrier *>(_map[y][x]));
                 break;
             case ' ':
                 addElement(new Element(Position(x, y)));
                 break;
             default:
                 if (line[x] >= '0' && line[x] <= '9')
-                    addElement(new ObjetRamassable(line[x] - 48, Position(x, y)));
+                    addElement(new Potion(line[x] - 48, Position(x, y)));
                 else
                     std::cerr << "Erreur dans .txt" << std::endl;
             }
@@ -111,6 +113,22 @@ void Carte::addElement(Element *e)
     }
 }
 
+void Carte::removeElement(Element *e)
+{
+    int x(e->getPosition().getPosX()),
+        y(e->getPosition().getPosY());
+    Element *tmp = _map[y][x];
+    addElement(new Element(e->getPosition()));
+    for (auto it = _team_1.begin(); it < _team_1.end(); it++)
+        if ((*it)->getPosition() == e->getPosition())
+            _team_1.erase(it);
+    for (auto it = _team_2.begin(); it < _team_2.end(); it++)
+        if ((*it)->getPosition() == e->getPosition())
+            _team_2.erase(it);
+    std::cout << "\nteam1: " << _team_1.size() << "\nteam2: " << _team_2.size() << "\n";
+    delete tmp;
+}
+
 bool Carte::canMove(Position oldPos, Position newPos)
 {
     int x(newPos.getPosX()), y(newPos.getPosY()),
@@ -127,7 +145,7 @@ bool Carte::updatePos(Guerrier *g, Position oldPos, Position newPos)
     if (!canMove(oldPos, newPos))
         return false;
 
-    int x(newPos.getPosX()), y(newPos.getPosY()),x2(oldPos.getPosX()), y2(oldPos.getPosY());
+    int x(newPos.getPosX()), y(newPos.getPosY()), x2(oldPos.getPosX()), y2(oldPos.getPosY());
 
     Element *tmp = _map[y2][x2];
     Element *e = _map[y][x];
@@ -140,29 +158,18 @@ bool Carte::updatePos(Guerrier *g, Position oldPos, Position newPos)
     return true;
 }
 
+Guerrier *Carte::CheckEnemy(Guerrier *g)
+{
+    int x(g->getPosition().getPosX()), y(g->getPosition().getPosY());
 
-Guerrier* Carte::CheckEnemy(Guerrier *g)
-{   
-    int x(g->getPosition().getPosX()),y(g->getPosition().getPosY());
-
-    if(this->_map[y-1][x]->element_action() && g->estAdversaire(dynamic_cast<Guerrier*>(this->_map[y-1][x])))
-        return dynamic_cast<Guerrier*>(this->_map[y-1][x]);
-    else if (this->_map[y][x+1]->element_action() && g->estAdversaire(dynamic_cast<Guerrier*>(this->_map[y][x+1])))
-        return dynamic_cast<Guerrier*>(this->_map[y][x+1]);
-    else if (this->_map[y+1][x]->element_action() && g->estAdversaire(dynamic_cast<Guerrier*>(this->_map[y+1][x])))
-        return dynamic_cast<Guerrier*>(this->_map[y+1][x]);
-     else if (this->_map[y][x-1]->element_action() && g->estAdversaire(dynamic_cast<Guerrier*>(this->_map[y][x-1])))
-        return dynamic_cast<Guerrier*>(this->_map[y][x-1]);
+    if (this->_map[y - 1][x]->element_action() && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y - 1][x])))
+        return dynamic_cast<Guerrier *>(this->_map[y - 1][x]);
+    else if (this->_map[y][x + 1]->element_action() && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x + 1])))
+        return dynamic_cast<Guerrier *>(this->_map[y][x + 1]);
+    else if (this->_map[y + 1][x]->element_action() && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y + 1][x])))
+        return dynamic_cast<Guerrier *>(this->_map[y + 1][x]);
+    else if (this->_map[y][x - 1]->element_action() && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x - 1])))
+        return dynamic_cast<Guerrier *>(this->_map[y][x - 1]);
 
     return nullptr;
 }
-
-
-
-
-
-
-
-
-
-

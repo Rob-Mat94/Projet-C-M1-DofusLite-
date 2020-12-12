@@ -12,28 +12,43 @@ class Guerrier : public Element
 public:
     Guerrier(const std::string equipe, Position pos = Position(0, 0),
              int hp = 100, std::string name = "default", int capAttack = 50, int capDef = 50);
-    virtual ~Guerrier();
+    virtual ~Guerrier() = default;
 
-    bool operator==(const Guerrier &g)const;
+    bool operator==(const Guerrier &g) const;
 
     /* Méthodes héritées */
     bool element_action();
     bool isEmpty() { return false; }
+
     /* Représentation (caractère pour l'instant) */
     char getDraw();
 
     /****************/
-    bool Attack(Guerrier* g);
-
     bool estAdversaire(Guerrier *g);
     bool move(Direction dir, Carte &c);
+
+    void heal(int hp);
+    void boostAttack(int stat);
+    void boostDefense(int stat);
+    void Attack(Guerrier *g, Carte &c);
+    void getAttacked(int capAttack, Carte &c);
+    void die(Carte &c);
+
     /***  G / S  ***/
     const int getHp() const { return this->_hp; }
-    void setHp(const int hp) { this->_hp = hp; }
+    void setHp(const int hp)
+    {
+        _hp = hp;
+        if (_hp < 0)
+            _hp = 0;
+    }
+
     const std::string getName() const { return this->_name; }
     const std::string getTeam() const { return this->_team; }
+
     const int getCapAttack() const { return this->_capAttack; }
     void setCapAttack(const int cA) { this->_capAttack = cA; }
+
     int getCapDef() const { return this->_capDef; }
     void setCapDef(const int cD) { this->_capDef = cD; }
 

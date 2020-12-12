@@ -3,6 +3,7 @@
 #Tout fichier .o ou .out
 *.o
 *.out
+*.exe
 
 # Dossier des .o
 **/obj
@@ -12,3 +13,6 @@
 
 #fichier settings vscode
 .vscode/settings.json
+
+#fichier test
+test.cpp

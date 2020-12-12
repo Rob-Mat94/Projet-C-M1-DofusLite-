@@ -1,5 +1,7 @@
 CPP=g++
 CFLAGS= -I$(HEADDIR) -g -Wall -Werror -pedantic -Os
+# option pour l'interface graphique sfml
+# GFLAGS= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-nerwork
 
 # Les différents dossiers
 SRCDIR= src
