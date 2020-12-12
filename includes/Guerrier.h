@@ -25,14 +25,14 @@ public:
 
     /****************/
     bool estAdversaire(Guerrier *g);
-    bool move(Direction dir, Carte &c);
+    bool move(Direction dir, Carte *c);
 
     void heal(int hp);
     void boostAttack(int stat);
     void boostDefense(int stat);
-    void Attack(Guerrier *g, Carte &c);
-    void getAttacked(int capAttack, Carte &c);
-    void die(Carte &c);
+    bool Attack(Guerrier *g, Carte *c);
+    void getAttacked(int capAttack, Carte *c);
+    void die(Carte *c);
 
     /***  G / S  ***/
     const int getHp() const { return this->_hp; }

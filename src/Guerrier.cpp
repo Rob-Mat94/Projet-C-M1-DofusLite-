@@ -30,13 +30,13 @@ bool Guerrier::element_action()
     return true;
 }
 
-bool Guerrier::move(Direction dir, Carte &carte)
+bool Guerrier::move(Direction dir, Carte *carte)
 {
     Coordinate c = getDirCoordinate(dir);
     Position oldPos = this->_pos;
     Position newPos = Position(_pos.getPosX() + c.x, _pos.getPosY() + c.y);
 
-    if (carte.updatePos(this, oldPos, newPos))
+    if (carte->updatePos(this, oldPos, newPos))
     {
         setPosition(newPos);
         return true;
@@ -61,12 +61,15 @@ void Guerrier::boostDefense(int stat)
     this->setCapDef(_capDef + stat);
 }
 
-void Guerrier::Attack(Guerrier *g, Carte &c)
+bool Guerrier::Attack(Guerrier *g, Carte *c)
 {
+    if (g == nullptr)
+        return false;
     g->getAttacked(this->_capAttack, c);
+    return true;
 }
 
-void Guerrier::getAttacked(int damages, Carte &c)
+void Guerrier::getAttacked(int damages, Carte *c)
 {
     int dmg = this->_capDef - damages;
     if (dmg < 0)
@@ -84,7 +87,7 @@ void Guerrier::getAttacked(int damages, Carte &c)
     }
 }
 
-void Guerrier::die(Carte &c)
+void Guerrier::die(Carte *c)
 {
-    c.removeElement(this);
+    c->removeElement(this);
 }

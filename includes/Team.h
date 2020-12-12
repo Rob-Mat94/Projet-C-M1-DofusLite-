@@ -17,6 +17,7 @@ public:
     void removeGuerrier(Guerrier *g);
     Guerrier *getCurrent();
     void increment();
+    int guerriersRestants() { return _list.size(); };
 
 private:
     std::list<Guerrier *> _list;

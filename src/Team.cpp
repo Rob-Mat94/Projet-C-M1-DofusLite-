@@ -22,5 +22,6 @@ Guerrier *Team::getCurrent()
 
 void Team::increment()
 {
-    this->current = ++current % _list.size();
+    current++;
+    this->current = current % _list.size();
 }
