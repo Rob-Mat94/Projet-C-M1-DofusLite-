@@ -1,5 +1,5 @@
 CPP=g++
-CFLAGS= -I$(HEADDIR) -g -Wall -Werror -pedantic -Os
+CFLAGS= -I$(HEADDIR) -g -Wall
 # option pour l'interface graphique sfml
 # GFLAGS= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-nerwork
 

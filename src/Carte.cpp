@@ -7,13 +7,9 @@
 #include "../includes/Armor.h"
 #include "../includes/Potion.h"
 
-std::vector<Guerrier *> Carte::_team_1{};
-std::vector<Guerrier *> Carte::_team_2{};
-
-Carte::Carte() : _width(0), _height(0), _map() {}
-
-Carte::Carte(std::string file_name)
+Carte::Carte(std::string file_name, Game *game)
 {
+    this->_game = game;
     std::ifstream file_map("res/" + file_name, std::ios::in);
     if (file_map)
     {
@@ -64,8 +60,9 @@ void Carte ::init_map(std::ifstream &f)
                 addElement(new Obstacle(Position(x, y)));
                 break;
             case 'g':
-                addElement(new Guerrier("team 2", Position(x, y)));
-                _team_2.push_back(dynamic_cast<Guerrier *>(_map[y][x]));
+                addElement(new Guerrier("team 1", Position(x, y)));
+                _game->addGuerrier(dynamic_cast<Guerrier *>(_map[y][x]));
+                //_team_2.push_back(dynamic_cast<Guerrier *>(_map[y][x]));
                 break;
             case 'S':
                 addElement(new Sword(15, Position(x, y)));
@@ -74,8 +71,9 @@ void Carte ::init_map(std::ifstream &f)
                 addElement(new Armor(20, Position(x, y)));
                 break;
             case 'G':
-                addElement(new Guerrier("team 1", Position(x, y)));
-                _team_1.push_back(dynamic_cast<Guerrier *>(_map[y][x]));
+                addElement(new Guerrier("team 2", Position(x, y)));
+                _game->addGuerrier(dynamic_cast<Guerrier *>(_map[y][x]));
+                //_team_1.push_back(g);
                 break;
             case ' ':
                 addElement(new Element(Position(x, y)));
@@ -115,18 +113,15 @@ void Carte::addElement(Element *e)
 
 void Carte::removeElement(Element *e)
 {
-    int x(e->getPosition().getPosX()),
-        y(e->getPosition().getPosY());
-    Element *tmp = _map[y][x];
     addElement(new Element(e->getPosition()));
-    for (auto it = _team_1.begin(); it < _team_1.end(); it++)
-        if ((*it)->getPosition() == e->getPosition())
-            _team_1.erase(it);
-    for (auto it = _team_2.begin(); it < _team_2.end(); it++)
-        if ((*it)->getPosition() == e->getPosition())
-            _team_2.erase(it);
-    std::cout << "\nteam1: " << _team_1.size() << "\nteam2: " << _team_2.size() << "\n";
-    delete tmp;
+    _game->removeGuerrier(dynamic_cast<Guerrier *>(e));
+    // for (auto it = _team_1.begin(); it < _team_1.end(); it++)
+    //     if ((*it)->getPosition() == e->getPosition())
+    //         _team_1.erase(it);
+    // for (auto it = _team_2.begin(); it < _team_2.end(); it++)
+    //     if ((*it)->getPosition() == e->getPosition())
+    //         _team_2.erase(it);
+    delete e;
 }
 
 bool Carte::canMove(Position oldPos, Position newPos)
