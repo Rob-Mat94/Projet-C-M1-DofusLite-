@@ -60,7 +60,12 @@ void Game::removeGuerrier(Guerrier *g)
 
 bool Game::step()
 {
-    switch (getKey())
+    return step(getKey());
+}
+
+bool Game::step(char key)
+{
+    switch (key)
     {
     case 'e':
         running = false;
@@ -76,7 +81,7 @@ bool Game::step()
     case 'y':
         return getCurrent()->Attack(carte->CheckEnemy(getCurrent()), carte);
     default:
-        return step();
+        return false;
     }
 }
 
@@ -145,4 +150,19 @@ std::string Game::getWinner()
     if (running)
         return "No Winner";
     return teamList.begin()->first + " Wins";
+}
+
+std::vector<std::vector<char>> Game::getMap()
+{
+    return carte->getMap();
+}
+
+int Game::getHeight()
+{
+    return carte->getHeight();
+}
+
+int Game::getWidth()
+{
+    return carte->getWidth();
 }

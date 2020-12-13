@@ -1,14 +1,23 @@
-#include "includes/Game.h"
-#include "includes/terminalSetting.h"
+#include "includes/Gui.h"
 
 int main()
 {
-    Game game = Game("carte1.txt");
-    initSettings();
-    game.start();
-    restoreSettings();
+    Gui gui;
+    gui.launch();
     return 0;
 }
+
+// #include "includes/Game.h"
+// #include "includes/terminalSetting.h"
+
+// int main()
+// {
+//     Game game = Game("carte1.txt");
+//     initSettings();
+//     game.start();
+//     restoreSettings();
+//     return 0;
+// }
 
 // #include "includes/Carte.h"
 // #include "includes/terminalSetting.h"

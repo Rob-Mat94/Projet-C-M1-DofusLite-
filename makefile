@@ -1,7 +1,7 @@
 CPP=g++
 CFLAGS= -I$(HEADDIR) -g -Wall
 # option pour l'interface graphique sfml
-# GFLAGS= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-nerwork
+GFLAGS= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 
 # Les différents dossiers
 SRCDIR= src
@@ -18,7 +18,7 @@ OBJ= $(SRC:$(SRCDIR)/%.cpp=$(LIBDIR)/%.o) $(LIBDIR)/main.o
 
 # Création de l'exécutable
 $(BINDIR)/$(BIN): $(OBJ)
-	$(CPP) -o $@ $^ $(CFLAGS) $(GLLIBS)
+	$(CPP) -o $@ $^ $(CFLAGS) $(GFLAGS)
 
 # Création des différents *.o à partir des *.cpp
 $(LIBDIR)/main.o: main.cpp
