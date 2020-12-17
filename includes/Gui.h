@@ -26,8 +26,10 @@ private:
     void drawArmor(int x, int y);
     void drawSword(int x, int y);
     void drawRect(int x, int y, sf::Color col);
+    void drawSprite(int x, int y, char c);
 
     static std::map<char, sf::Color> colors;
+    std::map<char, sf::Texture> textures = {};
 
     Game game;
     sf::RenderWindow *window;

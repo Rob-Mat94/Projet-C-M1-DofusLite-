@@ -11,7 +11,14 @@ std::map<char, sf::Color> Gui::colors = {
     {'p', sf::Color::Green},
 };
 
-Gui::Gui() : game("carte1.txt") {}
+Gui::Gui() : game("carte1.txt")
+{
+    textures['G'].loadFromFile("res/team1.png");
+    textures['g'].loadFromFile("res/team2.png");
+    textures['p'].loadFromFile("res/potion.png");
+    textures['A'].loadFromFile("res/armor.png");
+    textures['S'].loadFromFile("res/sword.png");
+}
 
 Gui::Gui(std::string file) : game(file) {}
 
@@ -31,19 +38,23 @@ void Gui::drawMap()
     {
         for (std::size_t x = 0; x < map[y].size(); x++)
         {
+            if (map[y][x] == '*')
+                drawObstacle(x, y);
+            else
+                drawSprite(x, y, map[y][x]);
             switch (map[y][x])
             {
             case 'g':
-                drawGuerrier(x, y, 'g');
+                drawSprite(x, y, 'g');
                 break;
             case 'G':
-                drawGuerrier(x, y, 'G');
+                drawSprite(x, y, 'G');
                 break;
             case 'A':
-                drawArmor(x, y);
+                drawSprite(x, y, 'A');
                 break;
             case 'S':
-                drawSword(x, y);
+                drawSprite(x, y, 'S');
                 break;
             case '*':
                 drawObstacle(x, y);
@@ -51,11 +62,22 @@ void Gui::drawMap()
             case ' ':
                 break;
             default:
-                drawPotion(x, y);
+                drawSprite(x, y, 'p');
                 break;
             }
         }
     }
+}
+
+void Gui::drawSprite(int x, int y, char c)
+{
+    Texture texture = textures[c];
+    texture.setSmooth(true);
+    Sprite sprite;
+    sprite.setTexture(texture);
+    sprite.scale((scale / texture.getSize().x), (scale / texture.getSize().y));
+    sprite.setPosition(scale * x, scale * y);
+    window->draw(sprite);
 }
 
 void Gui::drawRect(int x, int y, sf::Color col)
