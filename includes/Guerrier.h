@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Direction.h"
 #include "Carte.h"
+#include <vector>
 
 class Carte;
 class Guerrier : public Element
@@ -53,6 +54,8 @@ public:
     void setCapDef(const int cD) { this->_capDef = cD; }
 
 private:
+    static std::vector<std::string> name_list;
+    static int name_list_index;
     int _hp;
     const std::string _name;
     const std::string _team;

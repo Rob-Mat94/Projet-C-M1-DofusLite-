@@ -1,7 +1,12 @@
 #include "../includes/Guerrier.h"
 
+
+
+std::vector<std::string> Guerrier::name_list = {"Gareth","Lancelot","Arthur","Perceval","Léodagan","Yvain","Robert","Sagremor"};
+int Guerrier::name_list_index = 0;
+
 Guerrier::Guerrier(const std::string team, Position pos, int hp, std::string name, int capAttack, int capDef)
-    : Element(pos), _hp(hp), _name(name), _team(team), _capAttack(capAttack), _capDef(capDef) {}
+    : Element(pos), _hp(hp), _name(name_list[name_list_index]), _team(team), _capAttack(capAttack), _capDef(capDef) {name_list_index++;}
 
 bool Guerrier::estAdversaire(Guerrier *g)
 {
