@@ -18,6 +18,8 @@ Gui::Gui() : game("carte1.txt")
     textures['p'].loadFromFile("res/potion.png");
     textures['A'].loadFromFile("res/armor.png");
     textures['S'].loadFromFile("res/sword.png");
+    textures['M'].loadFromFile("res/map.jpg");
+    textures['*'].loadFromFile("res/wall.jpg");
 }
 
 Gui::Gui(std::string file) : game(file) {}
@@ -28,11 +30,26 @@ void Gui::initWindow()
     this->scale = 50;
     this->height = game.getHeight() * scale;
     this->width = game.getWidth() * scale;
-    this->window = new sf::RenderWindow(sf::VideoMode(width, height), "DofusLite");
+    this->infoBarHeight = width/8;
+    this->window = new sf::RenderWindow(sf::VideoMode(width, height + infoBarHeight), "DofusLite");
+}
+
+
+void Gui::drawSprite(int x, int y, char c)
+{
+    Texture texture = textures[c];
+    texture.setSmooth(true);
+    Sprite sprite;
+    sprite.setTexture(texture);
+    sprite.scale((scale / texture.getSize().x), (scale / texture.getSize().y));
+    sprite.setPosition(scale * x, scale * y);
+
+    window->draw(sprite);
 }
 
 void Gui::drawMap()
-{
+{   
+    drawMapBackground();
     std::vector<std::vector<char>> map = game.getMap();
     for (std::size_t y = 0; y < map.size(); y++)
     {
@@ -57,7 +74,7 @@ void Gui::drawMap()
                 drawSprite(x, y, 'S');
                 break;
             case '*':
-                drawObstacle(x, y);
+                drawSprite(x,y,'*');
                 break;
             case ' ':
                 break;
@@ -67,18 +84,16 @@ void Gui::drawMap()
             }
         }
     }
+
+    drawInformation(*game.getCurrent(),0,height+ infoBarHeight / 15);
+    if(game.getEnemy() != nullptr)
+    {
+        drawInformation(*game.getEnemy(), width/3, height + infoBarHeight /15);
+        drawCommandInformation(width/2 + width/6, height + infoBarHeight /15);
+    }
 }
 
-void Gui::drawSprite(int x, int y, char c)
-{
-    Texture texture = textures[c];
-    texture.setSmooth(true);
-    Sprite sprite;
-    sprite.setTexture(texture);
-    sprite.scale((scale / texture.getSize().x), (scale / texture.getSize().y));
-    sprite.setPosition(scale * x, scale * y);
-    window->draw(sprite);
-}
+
 
 void Gui::drawRect(int x, int y, sf::Color col)
 {
@@ -90,29 +105,43 @@ void Gui::drawRect(int x, int y, sf::Color col)
     window->draw(shape);
 }
 
-void Gui::drawGuerrier(int x, int y, char team)
-{
-    drawRect(x, y, colors[team]);
-}
-
 void Gui::drawObstacle(int x, int y)
 {
     drawRect(x, y, colors['*']);
 }
 
-void Gui::drawPotion(int x, int y)
+void Gui::drawMapBackground()
 {
-    drawRect(x, y, colors['p']);
+    Texture mappng = textures['M'];
+    mappng.setSmooth(true);
+    Sprite s;
+    s.setTexture(mappng);
+    window->draw(s);
 }
 
-void Gui::drawArmor(int x, int y)
+void Gui::drawInformation(const Guerrier& g, int x, int y) 
 {
-    drawRect(x, y, colors['A']);
+    Font font;
+    font.loadFromFile("res/yoster.ttf");
+  
+    /* Name / Hp / Attack / Def*/
+    std::string info = "#Name : "+g.getName()+"\n"+std::to_string(g.getHp()) + " HP\n"+std::to_string(g.getCapAttack())
+    +" Attack damage\n"+std::to_string(g.getCapDef())+" Defense";
+    sf::Text text1(info,font,12);
+    text1.setPosition(x,y);
+    window->draw(text1);
+    
+    
+
 }
 
-void Gui::drawSword(int x, int y)
+void Gui::drawCommandInformation(int x, int y) 
 {
-    drawRect(x, y, colors['S']);
+    Font font;
+    font.loadFromFile("res/yoster.ttf");
+    sf::Text text("(Press Y to attack)",font,12);
+    text.setPosition(x,y);
+    window->draw(text);
 }
 
 void Gui::launch()

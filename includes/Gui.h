@@ -20,12 +20,18 @@ public:
     void launch();
 
 private:
-    void drawGuerrier(int x, int y, char team);
     void drawObstacle(int x, int y);
+    void drawMapBackground();
+    void drawInformation(const Guerrier& g,int x, int y);
+    void drawCommandInformation(int x, int y);
+    /*
+    void drawGuerrier(int x, int y, char team);
     void drawPotion(int x, int y);
     void drawArmor(int x, int y);
     void drawSword(int x, int y);
+    */
     void drawRect(int x, int y, sf::Color col);
+
     void drawSprite(int x, int y, char c);
 
     static std::map<char, sf::Color> colors;
@@ -33,7 +39,7 @@ private:
 
     Game game;
     sf::RenderWindow *window;
-    float width, height, scale, thickness;
+    float width, height, scale, thickness, infoBarHeight;
 };
 
 #endif

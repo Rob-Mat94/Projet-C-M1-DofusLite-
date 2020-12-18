@@ -8,7 +8,7 @@
 class Team;
 class Carte;
 
-class Game
+class Game 
 {
 public:
     Game(std::string file);
@@ -29,6 +29,8 @@ public:
     int getHeight();
     int getWidth();
 
+    Guerrier* getEnemy();
+    
     bool isRunnig()
     {
         return running;

@@ -166,3 +166,9 @@ int Game::getWidth()
 {
     return carte->getWidth();
 }
+
+Guerrier* Game::getEnemy()
+{
+    return carte->CheckEnemy(getCurrent());
+}
+

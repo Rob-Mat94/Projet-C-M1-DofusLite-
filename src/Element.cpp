@@ -21,3 +21,4 @@ const Position &Element::getPosition() const
 {
     return this->_pos;
 }
+
