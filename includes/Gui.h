@@ -22,8 +22,9 @@ public:
 private:
     void drawObstacle(int x, int y);
     void drawMapBackground();
-    void drawInformation(const Guerrier& g,int x, int y);
+    void drawInformation(const Guerrier &g, int x, int y);
     void drawCommandInformation(int x, int y);
+    void drawName();
     /*
     void drawGuerrier(int x, int y, char team);
     void drawPotion(int x, int y);

@@ -30,10 +30,9 @@ void Gui::initWindow()
     this->scale = 50;
     this->height = game.getHeight() * scale;
     this->width = game.getWidth() * scale;
-    this->infoBarHeight = width/8;
+    this->infoBarHeight = width / 8;
     this->window = new sf::RenderWindow(sf::VideoMode(width, height + infoBarHeight), "DofusLite");
 }
-
 
 void Gui::drawSprite(int x, int y, char c)
 {
@@ -48,7 +47,7 @@ void Gui::drawSprite(int x, int y, char c)
 }
 
 void Gui::drawMap()
-{   
+{
     drawMapBackground();
     std::vector<std::vector<char>> map = game.getMap();
     for (std::size_t y = 0; y < map.size(); y++)
@@ -74,7 +73,7 @@ void Gui::drawMap()
                 drawSprite(x, y, 'S');
                 break;
             case '*':
-                drawSprite(x,y,'*');
+                drawSprite(x, y, '*');
                 break;
             case ' ':
                 break;
@@ -85,15 +84,14 @@ void Gui::drawMap()
         }
     }
 
-    drawInformation(*game.getCurrent(),0,height+ infoBarHeight / 15);
-    if(game.getEnemy() != nullptr)
+    drawName();
+    drawInformation(*game.getCurrent(), 0, height + infoBarHeight / 15);
+    if (game.getEnemy() != nullptr)
     {
-        drawInformation(*game.getEnemy(), width/3, height + infoBarHeight /15);
-        drawCommandInformation(width/2 + width/6, height + infoBarHeight /15);
+        drawInformation(*game.getEnemy(), width / 3, height + infoBarHeight / 15);
+        drawCommandInformation(width / 2 + width / 6, height + infoBarHeight / 15);
     }
 }
-
-
 
 void Gui::drawRect(int x, int y, sf::Color col)
 {
@@ -119,28 +117,36 @@ void Gui::drawMapBackground()
     window->draw(s);
 }
 
-void Gui::drawInformation(const Guerrier& g, int x, int y) 
+void Gui::drawInformation(const Guerrier &g, int x, int y)
 {
     Font font;
     font.loadFromFile("res/yoster.ttf");
-  
-    /* Name / Hp / Attack / Def*/
-    std::string info = "#Name : "+g.getName()+"\n"+std::to_string(g.getHp()) + " HP\n"+std::to_string(g.getCapAttack())
-    +" Attack damage\n"+std::to_string(g.getCapDef())+" Defense";
-    sf::Text text1(info,font,12);
-    text1.setPosition(x,y);
-    window->draw(text1);
-    
-    
 
+    /* Name / Hp / Attack / Def*/
+    std::string info = "#Name : " + g.getName() + "\n" + std::to_string(g.getHp()) + " HP\n" + std::to_string(g.getCapAttack()) + " Attack damage\n" + std::to_string(g.getCapDef()) + " Defense";
+    sf::Text text1(info, font, 12);
+    text1.setPosition(x, y);
+    window->draw(text1);
 }
 
-void Gui::drawCommandInformation(int x, int y) 
+void Gui::drawName()
 {
     Font font;
     font.loadFromFile("res/yoster.ttf");
-    sf::Text text("(Press Y to attack)",font,12);
-    text.setPosition(x,y);
+    std::string name = game.getCurrent()->getName();
+    sf::Text text1(name, font, 12);
+    int x = game.getCurrent()->getPosition().getPosX();
+    int y = game.getCurrent()->getPosition().getPosY();
+    text1.setPosition(x * scale, y * scale);
+    window->draw(text1);
+}
+
+void Gui::drawCommandInformation(int x, int y)
+{
+    Font font;
+    font.loadFromFile("res/yoster.ttf");
+    sf::Text text("(Press Y to attack)", font, 12);
+    text.setPosition(x, y);
     window->draw(text);
 }
 

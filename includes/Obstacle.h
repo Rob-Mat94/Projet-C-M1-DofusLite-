@@ -8,13 +8,12 @@ class Obstacle : public Element
 public:
     Obstacle(Position pos = Position(0, 0));
     virtual ~Obstacle();
-    virtual bool element_action();
+    virtual bool element_action(Element *e);
 
     /* Méthodes héritées */
     /* Représentation (caractère pour l'instant) */
     char getDraw() { return '*'; }
     bool isEmpty() { return false; }
-
 };
 
 #endif

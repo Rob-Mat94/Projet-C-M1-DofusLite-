@@ -6,6 +6,7 @@
 #include "../includes/Sword.h"
 #include "../includes/Armor.h"
 #include "../includes/Potion.h"
+#include "../includes/EmptyElement.h"
 
 Carte::Carte(std::string file_name, Game *game)
 {
@@ -62,7 +63,6 @@ void Carte ::init_map(std::ifstream &f)
             case 'g':
                 addElement(new Guerrier("team 1", Position(x, y)));
                 _game->addGuerrier(dynamic_cast<Guerrier *>(_map[y][x]));
-                //_team_2.push_back(dynamic_cast<Guerrier *>(_map[y][x]));
                 break;
             case 'S':
                 addElement(new Sword(15, Position(x, y)));
@@ -73,16 +73,18 @@ void Carte ::init_map(std::ifstream &f)
             case 'G':
                 addElement(new Guerrier("team 2", Position(x, y)));
                 _game->addGuerrier(dynamic_cast<Guerrier *>(_map[y][x]));
-                //_team_1.push_back(g);
                 break;
             case ' ':
-                addElement(new Element(Position(x, y)));
+                addElement(new EmptyElement(Position(x, y)));
                 break;
             default:
                 if (line[x] >= '0' && line[x] <= '9')
                     addElement(new Potion(line[x] - 48, Position(x, y)));
                 else
+                {
                     std::cerr << "Erreur dans .txt" << std::endl;
+                    exit(1);
+                }
             }
         }
         y++;
@@ -113,14 +115,8 @@ void Carte::addElement(Element *e)
 
 void Carte::removeElement(Element *e)
 {
-    addElement(new Element(e->getPosition()));
+    addElement(new EmptyElement(e->getPosition()));
     _game->removeGuerrier(dynamic_cast<Guerrier *>(e));
-    // for (auto it = _team_1.begin(); it < _team_1.end(); it++)
-    //     if ((*it)->getPosition() == e->getPosition())
-    //         _team_1.erase(it);
-    // for (auto it = _team_2.begin(); it < _team_2.end(); it++)
-    //     if ((*it)->getPosition() == e->getPosition())
-    //         _team_2.erase(it);
     delete e;
 }
 
@@ -144,9 +140,9 @@ bool Carte::updatePos(Guerrier *g, Position oldPos, Position newPos)
 
     Element *tmp = _map[y2][x2];
     Element *e = _map[y][x];
-    addElement(new Element(oldPos));
+    addElement(new EmptyElement(oldPos));
 
-    e->pickUpElement(g);
+    e->element_action(g);
 
     delete e;
     _map[y][x] = tmp;
@@ -155,15 +151,19 @@ bool Carte::updatePos(Guerrier *g, Position oldPos, Position newPos)
 
 Guerrier *Carte::CheckEnemy(Guerrier *g)
 {
-    int x(g->getPosition().getPosX()), y(g->getPosition().getPosY());
+    int x = g->getPosition().getPosX(),
+        y = g->getPosition().getPosY();
 
-    if (this->_map[y - 1][x]->element_action() && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y - 1][x])))
+    if (g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y - 1][x])))
         return dynamic_cast<Guerrier *>(this->_map[y - 1][x]);
-    else if (this->_map[y][x + 1]->element_action() && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x + 1])))
+
+    else if (g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x + 1])))
         return dynamic_cast<Guerrier *>(this->_map[y][x + 1]);
-    else if (this->_map[y + 1][x]->element_action() && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y + 1][x])))
+
+    else if (g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y + 1][x])))
         return dynamic_cast<Guerrier *>(this->_map[y + 1][x]);
-    else if (this->_map[y][x - 1]->element_action() && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x - 1])))
+
+    else if (g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x - 1])))
         return dynamic_cast<Guerrier *>(this->_map[y][x - 1]);
 
     return nullptr;

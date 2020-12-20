@@ -4,7 +4,7 @@ Obstacle::Obstacle(Position pos) : Element(pos) {}
 
 Obstacle::~Obstacle() {}
 
-bool Obstacle::element_action()
+bool Obstacle::element_action(Element *e)
 {
     return false;
 }

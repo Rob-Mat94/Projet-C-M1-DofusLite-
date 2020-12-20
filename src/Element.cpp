@@ -11,14 +11,7 @@ void Element::setPosition(const Position &pos)
     this->_pos = pos;
 }
 
-// représente ' '(vide) pour l'instant
-bool Element ::element_action()
-{
-    return false;
-}
-
 const Position &Element::getPosition() const
 {
     return this->_pos;
 }
-

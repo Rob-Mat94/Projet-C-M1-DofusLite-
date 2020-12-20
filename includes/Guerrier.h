@@ -18,7 +18,7 @@ public:
     bool operator==(const Guerrier &g) const;
 
     /* Méthodes héritées */
-    bool element_action();
+    bool element_action(Element *e);
     bool isEmpty() { return false; }
 
     /* Représentation (caractère pour l'instant) */

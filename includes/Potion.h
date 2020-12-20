@@ -10,8 +10,6 @@ public:
 
     const int getHpToGive() const { return _hp_to_give; }
 
-    /* Méthodes héritées */
-    /* Représentation (caractère pour l'instant) */
     char getDraw() { return _hp_to_give + '0'; }
     void pickUpElement(Guerrier *g);
 
