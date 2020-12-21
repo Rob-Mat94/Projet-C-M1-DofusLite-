@@ -185,8 +185,8 @@ void Gui::drawWinner()
 
 void Gui::launch()
 {
-    int pm = 500;
-    while (game.isRunnig())
+    int pm = 4;
+    while (window->isOpen() && game.isRunnig())
     {
         char key = ' ';
         sf::Event event;
