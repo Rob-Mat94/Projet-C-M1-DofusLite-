@@ -1,13 +1,12 @@
 #include "../includes/Guerrier.h"
 
-std::vector<std::string> Guerrier::name_list = {"Gareth", "Lancelot", "Arthur", "Perceval", "Léodagan", "Yvain", "Robert", "Sagremor"};
-int Guerrier::name_list_index = 0;
+std::vector<std::string> Guerrier::name_list = {"Gareth", "Lancelot", "Arthur", "Perceval", "Leodagan", "Yvain", "Robert", "Sagremor"};
+int Guerrier::name_list_index = rand() % name_list.size();
 
 Guerrier::Guerrier(const std::string team, Position pos, int hp, std::string name, int capAttack, int capDef)
     : Element(pos), _hp(hp), _name(name_list[name_list_index]), _team(team), _capAttack(capAttack), _capDef(capDef)
 {
-    ++name_list_index;
-    name_list_index = name_list_index % name_list.size();
+    name_list_index = rand() % name_list.size();
 }
 
 bool Guerrier::estAdversaire(Guerrier *g)
