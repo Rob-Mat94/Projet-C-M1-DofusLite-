@@ -15,33 +15,34 @@ public:
     virtual ~Game();
     void addGuerrier(Guerrier *g);
     void removeGuerrier(Guerrier *g);
-    void start();
     void reset();
 
+    std::vector<std::vector<char>> getMap();
     Guerrier *getCurrent();
-    Team *getCurrentTeam();
-    auto getEmptyTeam();
+    Guerrier *getEnemy();
     std::string getWinner();
     void increment();
     void isGameOver();
-    bool step();
-    bool step(char key);
-    std::vector<std::vector<char>> getMap();
+    bool isRunnig();
     int getHeight();
     int getWidth();
 
-    Guerrier *getEnemy();
+    bool step();
+    bool step(char key);
+    void start();
 
-    bool isRunnig()
-    {
-        return running;
-    };
 
 private:
-    std::map<std::string, Team *> teamList = {};
+    Team *getCurrentTeam();
+    auto getEmptyTeam();
+    void deleteAll();
+
     Carte *carte;
-    int currentTeam;
-    bool running;
+    std::string _file;
+
+    std::map<std::string, Team *> teamList = {};
+    int currentTeam = 0;
+    bool running = true;
 };
 
 #endif

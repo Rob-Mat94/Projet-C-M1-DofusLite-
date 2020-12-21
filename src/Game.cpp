@@ -3,31 +3,30 @@
 #include "../includes/Carte.h"
 #include "../includes/Team.h"
 
-Game::Game(std::string file)
+Game::Game(std::string file) : _file(file)
 {
-    this->currentTeam = 0;
-    this->running = true;
-    this->teamList = {};
-    carte = new Carte(file, this);
+    carte = new Carte(_file, this);
+}
+
+void Game::deleteAll()
+{
+    delete carte;
+    for (auto e : teamList)
+        delete e.second;
 }
 
 void Game::reset()
 {
-
-    delete carte;
+    deleteAll();
     this->currentTeam = 0;
     this->running = true;
-    for (auto e : teamList)
-        delete e.second;
     this->teamList = {};
-    carte = new Carte("carte1.txt", this);
+    carte = new Carte(_file, this);
 }
 
 Game::~Game()
 {
-    delete carte;
-    for (auto e : teamList)
-        delete e.second;
+    deleteAll();
 }
 
 Guerrier *Game::getCurrent()
@@ -76,6 +75,47 @@ void Game::removeGuerrier(Guerrier *g)
     teamList[g->getTeam()]->removeGuerrier(g);
 }
 
+void Game::isGameOver()
+{
+    if (getEmptyTeam() != teamList.end())
+        teamList.erase(getEmptyTeam());
+    running = teamList.size() > 1;
+}
+
+bool Game::isRunnig()
+{
+    return running;
+};
+
+std::string Game::getWinner()
+{
+    if (running)
+        return "No Winner";
+    return teamList.begin()->first + " Wins";
+}
+
+std::vector<std::vector<char>> Game::getMap()
+{
+    return carte->getMap();
+}
+
+int Game::getHeight()
+{
+    return carte->getHeight();
+}
+
+int Game::getWidth()
+{
+    return carte->getWidth();
+}
+
+Guerrier *Game::getEnemy()
+{
+    return carte->CheckEnemy(getCurrent());
+}
+
+// Les methodes et fonctions à partir de cette ligne ne sont utilisé que pour l'affichage dans le terminal linux
+
 bool Game::step()
 {
     return step(getKey());
@@ -103,7 +143,7 @@ bool Game::step(char key)
     }
 }
 
-// 2 Méthodes qui servent à afficher les infos à propos du guerrier
+// 2 fonctions qui servent à afficher les infos à propos du guerrier
 auto printInfo = [](Guerrier *g, int &pm) -> void {
     std::cout << "Appuyez sur 'e' pour quitter, z, q, s, d, pour bouger, y pour attaquer\n";
     std::cout << g->getName()
@@ -156,38 +196,4 @@ void Game::start()
     printEnemyInfo(carte->CheckEnemy(getCurrent()));
     carte->printMap();
     std::cout << "\n" + getWinner() + "\n";
-}
-
-void Game::isGameOver()
-{
-    if (getEmptyTeam() != teamList.end())
-        teamList.erase(getEmptyTeam());
-    running = teamList.size() > 1;
-}
-
-std::string Game::getWinner()
-{
-    if (running)
-        return "No Winner";
-    return teamList.begin()->first + " Wins";
-}
-
-std::vector<std::vector<char>> Game::getMap()
-{
-    return carte->getMap();
-}
-
-int Game::getHeight()
-{
-    return carte->getHeight();
-}
-
-int Game::getWidth()
-{
-    return carte->getWidth();
-}
-
-Guerrier *Game::getEnemy()
-{
-    return carte->CheckEnemy(getCurrent());
 }

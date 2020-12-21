@@ -2,29 +2,39 @@
 
 using namespace sf;
 
-std::map<char, sf::Color> Gui::colors = {
-    {'g', sf::Color::Red},
-    {'G', sf::Color::Yellow},
-    {'A', sf::Color::Magenta},
-    {'S', sf::Color::Cyan},
-    {'*', sf::Color::Blue},
-    {'p', sf::Color::Green},
-};
-
 Gui::Gui() : game("carte1.txt")
 {
-    textures['G'].loadFromFile("res/team1.png");
-    textures['g'].loadFromFile("res/team2.png");
-    textures['p'].loadFromFile("res/potion.png");
-    textures['A'].loadFromFile("res/armor.png");
-    textures['S'].loadFromFile("res/sword.png");
-    textures['M'].loadFromFile("res/map.jpg");
-    textures['*'].loadFromFile("res/wall.jpg");
+    initTextures();
     initWindow();
 }
 
 Gui::Gui(std::string file) : game(file)
 {
+    initTextures();
+    initWindow();
+}
+
+Gui::~Gui()
+{
+    delete window;
+};
+
+void Gui::reset()
+{
+    game.reset();
+    this->height = game.getHeight() * scale;
+    this->width = game.getWidth() * scale;
+}
+
+void Gui::initWindow()
+{
+    this->height = game.getHeight() * scale;
+    this->width = game.getWidth() * scale;
+    this->window = new sf::RenderWindow(sf::VideoMode(width, height + infoBarHeight), "DofusLite");
+}
+
+void Gui::initTextures()
+{
     textures['G'].loadFromFile("res/team1.png");
     textures['g'].loadFromFile("res/team2.png");
     textures['p'].loadFromFile("res/potion.png");
@@ -32,34 +42,16 @@ Gui::Gui(std::string file) : game(file)
     textures['S'].loadFromFile("res/sword.png");
     textures['M'].loadFromFile("res/map.jpg");
     textures['*'].loadFromFile("res/wall.jpg");
-    initWindow();
-}
 
-void Gui::reset()
-{
-    window->close();
-    delete window;
-    game.reset();
-    initWindow();
-}
-
-void Gui::initWindow()
-{
-    this->thickness = -2;
-    this->scale = 50;
-    this->height = game.getHeight() * scale;
-    this->width = game.getWidth() * scale;
-    this->infoBarHeight = width / 8;
-    this->window = new sf::RenderWindow(sf::VideoMode(width, height + infoBarHeight), "DofusLite");
+    for (auto t : textures)
+        t.second.setSmooth(true);
 }
 
 void Gui::drawSprite(int x, int y, char c)
 {
-    Texture texture = textures[c];
-    texture.setSmooth(true);
     Sprite sprite;
-    sprite.setTexture(texture);
-    sprite.scale((scale / texture.getSize().x), (scale / texture.getSize().y));
+    sprite.setTexture(textures[c]);
+    sprite.scale((scale / textures[c].getSize().x), (scale / textures[c].getSize().y));
     sprite.setPosition(scale * x, scale * y);
 
     window->draw(sprite);
@@ -73,33 +65,14 @@ void Gui::drawMap()
     {
         for (std::size_t x = 0; x < map[y].size(); x++)
         {
-            if (map[y][x] == '*')
-                drawObstacle(x, y);
-            else
-                drawSprite(x, y, map[y][x]);
-            switch (map[y][x])
+            if (std::string("GASg*").find(map[y][x]) < 5)
             {
-            case 'g':
-                drawSprite(x, y, 'g');
-                break;
-            case 'G':
-                drawSprite(x, y, 'G');
-                break;
-            case 'A':
-                drawSprite(x, y, 'A');
-                break;
-            case 'S':
-                drawSprite(x, y, 'S');
-                break;
-            case '*':
-                drawSprite(x, y, '*');
-                break;
-            case ' ':
-                break;
-            default:
+                drawSprite(x, y, map[y][x]);
+            }
+            else if (map[y][x] != ' ')
+            {
                 drawSprite(x, y, 'p');
                 drawStat(x, y, map[y][x]);
-                break;
             }
         }
     }
@@ -113,27 +86,11 @@ void Gui::drawMap()
     }
 }
 
-void Gui::drawRect(int x, int y, sf::Color col)
-{
-    RectangleShape shape(Vector2f(scale, scale));
-    shape.setOutlineThickness(thickness);
-    shape.setOutlineColor(col);
-    shape.setFillColor(Color::Black);
-    shape.setPosition(scale * x, scale * y);
-    window->draw(shape);
-}
-
-void Gui::drawObstacle(int x, int y)
-{
-    drawRect(x, y, colors['*']);
-}
-
 void Gui::drawMapBackground()
 {
-    Texture mappng = textures['M'];
-    mappng.setSmooth(true);
     Sprite s;
-    s.setTexture(mappng);
+    s.setTexture(textures['M']);
+    s.scale(2, 2);
     window->draw(s);
 }
 
@@ -179,11 +136,79 @@ void Gui::drawWinner()
     shape.setFillColor(Color::Black);
     shape.setPosition(0, y);
     window->draw(shape);
-    std::string str = "\n\t**" + game.getWinner() + "**\tPress Escape or close to leave or R to restart !";
+    std::string str = "\n\t*" + game.getWinner() + "*\tPress Escape or close to leave, or R to restart !";
     drawText(str, 0, y);
 }
 
-void Gui::launch()
+void Gui::displayMenu()
+{
+    while (window->isOpen())
+    {
+        if (select < 0)
+            select = 2;
+
+        Font font;
+        font.loadFromFile("res/yoster.ttf");
+        Text title("DofusLite", font);
+        Text item1("Map 1", font);
+        Text item2("Map 2", font);
+        Text item3("Quit", font);
+
+        title.setPosition(scale * 3, scale * 2);
+        item1.setPosition(scale, scale * 5);
+        item2.setPosition(scale, scale * 6);
+        item3.setPosition(scale, scale * 7);
+
+        std::vector<Text> items = {item1, item2, item3};
+        items[select].setFillColor(Color::Blue);
+
+        std::vector<std::string> maps = {"carte1.txt", "carte2.txt"};
+
+        window->clear();
+        drawMapBackground();
+        window->draw(title);
+        for (auto item : items)
+        {
+            window->draw(item);
+        }
+        window->display();
+
+        Event event;
+        while (window->pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window->close();
+            if (event.type == sf::Event::KeyPressed)
+                switch (event.key.code)
+                {
+                case sf::Keyboard::Escape:
+                    window->close();
+                    break;
+                case sf::Keyboard::Z:
+                    select--;
+                    select %= 3;
+                    break;
+                case sf::Keyboard::S:
+                    select++;
+                    select %= 3;
+                    break;
+                case sf::Keyboard::Enter:
+                    if ((size_t)select < maps.size())
+                    {
+                        reset(); // = Game(maps[select]);
+                        start();
+                    }
+                    else
+                        window->close();
+                    break;
+                default:
+                    break;
+                }
+        }
+    }
+}
+
+void Gui::start()
 {
     int pm = 4;
     while (window->isOpen() && game.isRunnig())
@@ -253,7 +278,12 @@ void Gui::launch()
         if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::R))
         {
             reset();
-            launch();
+            start();
         }
     }
+}
+
+void Gui::launch()
+{
+    displayMenu();
 }
