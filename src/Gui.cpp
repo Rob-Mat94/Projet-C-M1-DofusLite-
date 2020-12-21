@@ -20,9 +20,28 @@ Gui::Gui() : game("carte1.txt")
     textures['S'].loadFromFile("res/sword.png");
     textures['M'].loadFromFile("res/map.jpg");
     textures['*'].loadFromFile("res/wall.jpg");
+    initWindow();
 }
 
-Gui::Gui(std::string file) : game(file) {}
+Gui::Gui(std::string file) : game(file)
+{
+    textures['G'].loadFromFile("res/team1.png");
+    textures['g'].loadFromFile("res/team2.png");
+    textures['p'].loadFromFile("res/potion.png");
+    textures['A'].loadFromFile("res/armor.png");
+    textures['S'].loadFromFile("res/sword.png");
+    textures['M'].loadFromFile("res/map.jpg");
+    textures['*'].loadFromFile("res/wall.jpg");
+    initWindow();
+}
+
+void Gui::reset()
+{
+    window->close();
+    delete window;
+    game.reset();
+    initWindow();
+}
 
 void Gui::initWindow()
 {
@@ -79,6 +98,7 @@ void Gui::drawMap()
                 break;
             default:
                 drawSprite(x, y, 'p');
+                drawStat(x, y, map[y][x]);
                 break;
             }
         }
@@ -117,47 +137,60 @@ void Gui::drawMapBackground()
     window->draw(s);
 }
 
-void Gui::drawInformation(const Guerrier &g, int x, int y)
+void Gui::drawText(std::string str, int x, int y)
 {
     Font font;
     font.loadFromFile("res/yoster.ttf");
-
-    /* Name / Hp / Attack / Def*/
-    std::string info = "#Name : " + g.getName() + "\n" + std::to_string(g.getHp()) + " HP\n" + std::to_string(g.getCapAttack()) + " Attack damage\n" + std::to_string(g.getCapDef()) + " Defense";
-    sf::Text text1(info, font, 12);
-    text1.setPosition(x, y);
-    window->draw(text1);
-}
-
-void Gui::drawName()
-{
-    Font font;
-    font.loadFromFile("res/yoster.ttf");
-    std::string name = game.getCurrent()->getName();
-    sf::Text text1(name, font, 12);
-    int x = game.getCurrent()->getPosition().getPosX();
-    int y = game.getCurrent()->getPosition().getPosY();
-    text1.setPosition(x * scale, y * scale);
-    window->draw(text1);
-}
-
-void Gui::drawCommandInformation(int x, int y)
-{
-    Font font;
-    font.loadFromFile("res/yoster.ttf");
-    sf::Text text("(Press Y to attack)", font, 12);
+    sf::Text text(str, font, 12);
     text.setPosition(x, y);
     window->draw(text);
 }
 
+void Gui::drawInformation(const Guerrier &g, int x, int y)
+{
+    /* Name / Hp / Attack / Def*/
+    std::string info = "#Name : " + g.getName() + "\n" + std::to_string(g.getHp()) + " HP\n" + std::to_string(g.getCapAttack()) + " Attack damage\n" + std::to_string(g.getCapDef()) + " Defense";
+    drawText(info, x, y);
+}
+
+void Gui::drawName()
+{
+    std::string name = game.getCurrent()->getName();
+    int x = game.getCurrent()->getPosition().getPosX() * scale;
+    int y = game.getCurrent()->getPosition().getPosY() * scale;
+    drawText(name, x, y);
+}
+
+void Gui::drawStat(int x, int y, char stat)
+{
+    drawText({stat}, x * scale, y * scale - 12);
+}
+
+void Gui::drawCommandInformation(int x, int y)
+{
+    drawText("Press Y to attack", x, y);
+}
+
+void Gui::drawWinner()
+{
+    int y = (game.getHeight() * scale) / 2;
+
+    RectangleShape shape(Vector2f(game.getWidth() * scale, scale));
+    shape.setFillColor(Color::Black);
+    shape.setPosition(0, y);
+    window->draw(shape);
+    std::string str = "\n\t**" + game.getWinner() + "**\tPress Escape or close to leave or R to restart !";
+    drawText(str, 0, y);
+}
+
 void Gui::launch()
 {
-    int pm = 4;
-    initWindow();
-    while (window->isOpen() && game.isRunnig())
+    int pm = 500;
+    while (game.isRunnig())
     {
         char key = ' ';
         sf::Event event;
+
         while (window->pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -197,10 +230,30 @@ void Gui::launch()
                 game.increment();
             }
         }
-        game.isGameOver();
 
+        game.isGameOver();
         window->clear();
         drawMap();
         window->display();
+    }
+
+    while (window->isOpen())
+    {
+        window->clear();
+        drawMap();
+        drawWinner();
+        window->display();
+
+        sf::Event event;
+        window->pollEvent(event);
+        if (event.type == sf::Event::Closed)
+            window->close();
+        if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
+            window->close();
+        if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::R))
+        {
+            reset();
+            launch();
+        }
     }
 }

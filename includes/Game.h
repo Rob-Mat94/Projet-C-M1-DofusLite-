@@ -12,10 +12,11 @@ class Game
 {
 public:
     Game(std::string file);
-    virtual ~Game() = default;
+    virtual ~Game();
     void addGuerrier(Guerrier *g);
     void removeGuerrier(Guerrier *g);
     void start();
+    void reset();
 
     Guerrier *getCurrent();
     Team *getCurrentTeam();

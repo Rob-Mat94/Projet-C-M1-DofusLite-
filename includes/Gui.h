@@ -1,5 +1,6 @@
 #ifndef GUI_H
 #define GUI_H
+
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 
@@ -16,6 +17,7 @@ public:
     Gui(std::string file);
 
     void initWindow();
+    void reset();
     void drawMap();
     void launch();
 
@@ -25,6 +27,9 @@ private:
     void drawInformation(const Guerrier &g, int x, int y);
     void drawCommandInformation(int x, int y);
     void drawName();
+    void drawStat(int x, int y, char stat);
+    void drawText(std::string str, int x, int y);
+    void drawWinner();
     /*
     void drawGuerrier(int x, int y, char team);
     void drawPotion(int x, int y);

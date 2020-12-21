@@ -7,7 +7,27 @@ Game::Game(std::string file)
 {
     this->currentTeam = 0;
     this->running = true;
+    this->teamList = {};
     carte = new Carte(file, this);
+}
+
+void Game::reset()
+{
+
+    delete carte;
+    this->currentTeam = 0;
+    this->running = true;
+    for (auto e : teamList)
+        delete e.second;
+    this->teamList = {};
+    carte = new Carte("carte1.txt", this);
+}
+
+Game::~Game()
+{
+    delete carte;
+    for (auto e : teamList)
+        delete e.second;
 }
 
 Guerrier *Game::getCurrent()
@@ -27,8 +47,6 @@ auto Game::getEmptyTeam()
 
 void Game::increment()
 {
-    if (getEmptyTeam() != teamList.end())
-        teamList.erase(getEmptyTeam());
     getCurrentTeam()->increment();
     currentTeam++;
     currentTeam = currentTeam % teamList.size();
@@ -142,6 +160,8 @@ void Game::start()
 
 void Game::isGameOver()
 {
+    if (getEmptyTeam() != teamList.end())
+        teamList.erase(getEmptyTeam());
     running = teamList.size() > 1;
 }
 
