@@ -26,6 +26,13 @@ void Gui::reset()
     this->width = game.getWidth() * scale;
 }
 
+void Gui::reset(std::string file)
+{
+    game.reset(file);
+    this->height = game.getHeight() * scale;
+    this->width = game.getWidth() * scale;
+}
+
 void Gui::initWindow()
 {
     this->height = game.getHeight() * scale;
@@ -136,7 +143,7 @@ void Gui::drawWinner()
     shape.setFillColor(Color::Black);
     shape.setPosition(0, y);
     window->draw(shape);
-    std::string str = "\n\t*" + game.getWinner() + "*\tPress Escape or close to leave, or R to restart !";
+    std::string str = "\n\t*" + game.getWinner() + "*\tPress Escape to go to main menu, or R to restart !";
     drawText(str, 0, y);
 }
 
@@ -195,7 +202,7 @@ void Gui::displayMenu()
                 case sf::Keyboard::Enter:
                     if ((size_t)select < maps.size())
                     {
-                        reset(); // = Game(maps[select]);
+                        reset(maps[select]);
                         start();
                     }
                     else
@@ -274,7 +281,7 @@ void Gui::start()
         if (event.type == sf::Event::Closed)
             window->close();
         if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
-            window->close();
+            displayMenu();
         if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::R))
         {
             reset();

@@ -24,6 +24,12 @@ void Game::reset()
     carte = new Carte(_file, this);
 }
 
+void Game::reset(std::string file)
+{
+    _file = file;
+    reset();
+}
+
 Game::~Game()
 {
     deleteAll();

@@ -16,6 +16,7 @@ public:
     void addGuerrier(Guerrier *g);
     void removeGuerrier(Guerrier *g);
     void reset();
+    void reset(std::string file);
 
     std::vector<std::vector<char>> getMap();
     Guerrier *getCurrent();
@@ -30,7 +31,6 @@ public:
     bool step();
     bool step(char key);
     void start();
-
 
 private:
     Team *getCurrentTeam();
