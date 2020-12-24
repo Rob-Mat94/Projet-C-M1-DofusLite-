@@ -22,21 +22,19 @@ Gui::~Gui()
 void Gui::reset()
 {
     game.reset();
-    this->height = game.getHeight() * scale;
-    this->width = game.getWidth() * scale;
+    initSize();
 }
 
 void Gui::reset(std::string file)
 {
     game.reset(file);
-    this->height = game.getHeight() * scale;
-    this->width = game.getWidth() * scale;
+    initSize();
 }
 
 void Gui::initWindow()
 {
-    this->height = game.getHeight() * scale;
-    this->width = game.getWidth() * scale;
+    font.loadFromFile("res/yoster.ttf");
+    initSize();
     this->window = new sf::RenderWindow(sf::VideoMode(width, height + infoBarHeight), "DofusLite");
 }
 
@@ -52,6 +50,12 @@ void Gui::initTextures()
 
     for (auto t : textures)
         t.second.setSmooth(true);
+}
+
+void Gui::initSize()
+{
+    this->height = game.getHeight() * scale;
+    this->width = game.getWidth() * scale;
 }
 
 void Gui::drawSprite(int x, int y, char c)
@@ -103,8 +107,6 @@ void Gui::drawMapBackground()
 
 void Gui::drawText(std::string str, int x, int y)
 {
-    Font font;
-    font.loadFromFile("res/yoster.ttf");
     sf::Text text(str, font, 12);
     text.setPosition(x, y);
     window->draw(text);
@@ -147,39 +149,47 @@ void Gui::drawWinner()
     drawText(str, 0, y);
 }
 
+void Gui::drawTitle()
+{
+    Text title("DofusLite", font);
+    title.setPosition(scale * 3, scale * 2);
+    window->draw(title);
+}
+
+auto Gui::getItems()
+{
+    std::vector<Text> items;
+    int i = 5;
+    for (auto str : cartes)
+    {
+        Text item(str, font);
+        item.setPosition(scale, i * scale);
+        items.push_back(item);
+        i++;
+    }
+
+    Text quit("Quit", font);
+    quit.setPosition(scale, scale * i);
+    items.push_back(quit);
+    items[selected].setFillColor(Color::Blue);
+    return items;
+}
+
+void Gui::drawMenu()
+{
+    window->clear();
+    drawMapBackground();
+    drawTitle();
+    for (auto item : getItems())
+        window->draw(item);
+    window->display();
+}
+
 void Gui::displayMenu()
 {
     while (window->isOpen())
     {
-        if (select < 0)
-            select = 2;
-
-        Font font;
-        font.loadFromFile("res/yoster.ttf");
-        Text title("DofusLite", font);
-        Text item1("Map 1", font);
-        Text item2("Map 2", font);
-        Text item3("Quit", font);
-
-        title.setPosition(scale * 3, scale * 2);
-        item1.setPosition(scale, scale * 5);
-        item2.setPosition(scale, scale * 6);
-        item3.setPosition(scale, scale * 7);
-
-        std::vector<Text> items = {item1, item2, item3};
-        items[select].setFillColor(Color::Blue);
-
-        std::vector<std::string> maps = {"carte1.txt", "carte2.txt"};
-
-        window->clear();
-        drawMapBackground();
-        window->draw(title);
-        for (auto item : items)
-        {
-            window->draw(item);
-        }
-        window->display();
-
+        drawMenu();
         Event event;
         while (window->pollEvent(event))
         {
@@ -192,17 +202,15 @@ void Gui::displayMenu()
                     window->close();
                     break;
                 case sf::Keyboard::Z:
-                    select--;
-                    select %= 3;
+                    setSelected(-1);
                     break;
                 case sf::Keyboard::S:
-                    select++;
-                    select %= 3;
+                    setSelected(1);
                     break;
                 case sf::Keyboard::Enter:
-                    if ((size_t)select < maps.size())
+                    if ((size_t)selected < cartes.size())
                     {
-                        reset(maps[select]);
+                        reset(cartes[selected]);
                         start();
                     }
                     else
@@ -213,6 +221,11 @@ void Gui::displayMenu()
                 }
         }
     }
+}
+
+void Gui::setSelected(int i)
+{
+    selected = (selected + i) % (cartes.size() + 1);
 }
 
 void Gui::start()
@@ -231,7 +244,7 @@ void Gui::start()
                 switch (event.key.code)
                 {
                 case sf::Keyboard::Escape:
-                    window->close();
+                    displayMenu();
                     break;
                 case sf::Keyboard::Z:
                     key = 'z';

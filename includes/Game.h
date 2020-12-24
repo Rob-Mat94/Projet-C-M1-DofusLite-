@@ -27,15 +27,15 @@ public:
     bool isRunnig();
     int getHeight();
     int getWidth();
-
-    bool step();
     bool step(char key);
-    void start();
+
 
 private:
     Team *getCurrentTeam();
     auto getEmptyTeam();
     void deleteAll();
+    void start();
+    bool step();
 
     Carte *carte;
     std::string _file;

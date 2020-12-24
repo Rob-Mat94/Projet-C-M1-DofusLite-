@@ -23,22 +23,29 @@ private:
     void drawMap();
     void drawWinner();
     void drawName();
+    void drawMenu();
 
+    void drawTitle();
     void displayMenu();
+    auto getItems();
+    void setSelected(int i);
     void start();
 
+    void initSize();
     void initTextures();
     void initWindow();
     void reset();
     void reset(std::string file);
 
     Game game;
+    sf::Font font;
     sf::RenderWindow *window;
     std::map<char, sf::Texture> textures = {};
+    std::vector<sf::String> cartes = {"carte1.txt", "carte1.txt", "carte1.txt"};
     int width, height;
     float scale = 50.f;
     float infoBarHeight = (1.3f * scale);
-    int select = 0;
+    int selected = 0;
 };
 
 #endif
