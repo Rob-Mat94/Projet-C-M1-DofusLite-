@@ -30,6 +30,7 @@ private:
     auto getItems();
     void setSelected(int i);
     void start();
+    bool step();
 
     void initSize();
     void initTextures();

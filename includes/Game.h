@@ -28,7 +28,7 @@ public:
     int getHeight();
     int getWidth();
     bool step(char key);
-
+    void decrementPM();
 
 private:
     Team *getCurrentTeam();
@@ -41,8 +41,10 @@ private:
     std::string _file;
 
     std::map<std::string, Team *> teamList = {};
-    int currentTeam = 0;
+    int currentTeam = 0, pm = 4;
     bool running = true;
+
+    static const int PM = 4;
 };
 
 #endif

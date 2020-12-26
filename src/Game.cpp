@@ -55,6 +55,7 @@ void Game::increment()
     getCurrentTeam()->increment();
     currentTeam++;
     currentTeam = currentTeam % teamList.size();
+    pm = PM; // restore pm
 }
 
 Team *Game::getCurrentTeam()
@@ -120,11 +121,11 @@ Guerrier *Game::getEnemy()
     return carte->CheckEnemy(getCurrent());
 }
 
-// Les methodes et fonctions à partir de cette ligne ne sont utilisé que pour l'affichage dans le terminal linux
-
-bool Game::step()
+void Game::decrementPM()
 {
-    return step(getKey());
+    pm--;
+    if (pm <= 0)
+        increment();
 }
 
 bool Game::step(char key)
@@ -147,6 +148,13 @@ bool Game::step(char key)
     default:
         return false;
     }
+}
+
+// Les methodes et fonctions à partir de cette ligne ne sont utilisé que pour l'affichage dans le terminal linux
+
+bool Game::step()
+{
+    return step(getKey());
 }
 
 // 2 fonctions qui servent à afficher les infos à propos du guerrier

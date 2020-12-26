@@ -228,78 +228,55 @@ void Gui::setSelected(int i)
     selected = (selected + i) % (cartes.size() + 1);
 }
 
+bool Gui::step()
+{
+    game.isGameOver();
+    sf::Event event;
+    while (window->pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+            window->close();
+        if (event.type == sf::Event::KeyPressed)
+            switch (event.key.code)
+            {
+            case sf::Keyboard::Escape:
+                displayMenu();
+                break;
+            case sf::Keyboard::R:
+                reset();
+                start();
+                break;
+            case sf::Keyboard::Z:
+                return game.step('z');
+            case sf::Keyboard::S:
+                return game.step('s');
+            case sf::Keyboard::Q:
+                return game.step('q');
+            case sf::Keyboard::D:
+                return game.step('d');
+            case sf::Keyboard::Y:
+                return game.step('y');
+            default:
+                return false;
+            }
+    }
+    return false;
+}
+
 void Gui::start()
 {
-    int pm = 4;
-    while (window->isOpen() && game.isRunnig())
-    {
-        char key = ' ';
-        sf::Event event;
-
-        while (window->pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window->close();
-            if (event.type == sf::Event::KeyPressed)
-                switch (event.key.code)
-                {
-                case sf::Keyboard::Escape:
-                    displayMenu();
-                    break;
-                case sf::Keyboard::Z:
-                    key = 'z';
-                    break;
-                case sf::Keyboard::S:
-                    key = 's';
-                    break;
-                case sf::Keyboard::Q:
-                    key = 'q';
-                    break;
-                case sf::Keyboard::D:
-                    key = 'd';
-                    break;
-                case sf::Keyboard::Y:
-                    key = 'y';
-                    break;
-                default:
-                    break;
-                }
-        }
-
-        if (game.step(key))
-        {
-            pm--;
-            if (pm == 0)
-            {
-                pm = 4;
-                game.increment();
-            }
-        }
-
-        game.isGameOver();
-        window->clear();
-        drawMap();
-        window->display();
-    }
-
     while (window->isOpen())
     {
         window->clear();
         drawMap();
-        drawWinner();
-        window->display();
 
-        sf::Event event;
-        window->pollEvent(event);
-        if (event.type == sf::Event::Closed)
-            window->close();
-        if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
-            displayMenu();
-        if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::R))
-        {
-            reset();
-            start();
-        }
+        if (step())
+            game.decrementPM();
+
+        if (!game.isRunnig())
+            drawWinner();
+
+        window->display();
     }
 }
 
