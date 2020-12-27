@@ -143,7 +143,7 @@ void Gui::drawWinner()
 
     RectangleShape shape(Vector2f(game.getWidth() * scale, scale));
     shape.setFillColor(Color::Black);
-    shape.setPosition(0, y);
+    shape.setPosition(0, y + 4);
     window->draw(shape);
     std::string str = "\n\t*" + game.getWinner() + "*\tPress Escape to go to main menu, or R to restart !";
     drawText(str, 0, y);
@@ -159,16 +159,16 @@ void Gui::drawTitle()
 auto Gui::getItems()
 {
     std::vector<Text> items;
-    int i = 5;
+    int i = 4;
     for (auto str : cartes)
     {
-        Text item(str, font);
+        Text item("Jouer sur " + str, font, 20);
         item.setPosition(scale, i * scale);
         items.push_back(item);
         i++;
     }
 
-    Text quit("Quit", font);
+    Text quit("Quit", font, 20);
     quit.setPosition(scale, scale * i);
     items.push_back(quit);
     items[selected].setFillColor(Color::Blue);
@@ -230,7 +230,6 @@ void Gui::setSelected(int i)
 
 bool Gui::step()
 {
-    game.isGameOver();
     sf::Event event;
     while (window->pollEvent(event))
     {
@@ -255,7 +254,13 @@ bool Gui::step()
             case sf::Keyboard::D:
                 return game.step('d');
             case sf::Keyboard::Y:
-                return game.step('y');
+                if (game.step('y'))
+                {
+                    game.increment();
+                    return true;
+                }
+                else
+                    return false;
             default:
                 return false;
             }
@@ -267,6 +272,7 @@ void Gui::start()
 {
     while (window->isOpen())
     {
+        game.isGameOver();
         window->clear();
         drawMap();
 
