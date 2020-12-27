@@ -1,3 +1,6 @@
+#ifndef DIRECTION_H
+#define DIRECTION_H
+
 enum Direction
 {
     Up,
@@ -13,3 +16,5 @@ struct Coordinate
 };
 
 Coordinate getDirCoordinate(Direction dir);
+
+#endif

@@ -4,8 +4,7 @@
 class Position
 {
 public:
-
-    bool operator==(const Position &p)const;
+    bool operator==(const Position &p) const;
     Position(const int x = 0, const int y = 0);
     Position(const Position &pos);
     virtual ~Position();
