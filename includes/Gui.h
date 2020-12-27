@@ -35,6 +35,7 @@ private:
     void initSize();
     void initTextures();
     void initWindow();
+    void initConfig();
     void reset();
     void reset(std::string file);
 
@@ -42,7 +43,8 @@ private:
     sf::Font font;
     sf::RenderWindow *window;
     std::map<char, sf::Texture> textures = {};
-    std::vector<sf::String> cartes = {"carte1.txt", "carte1.txt", "carte1.txt"};
+    std::vector<sf::String> cartes = {},
+                            names = {};
     int width, height;
     float scale = 50.f;
     float infoBarHeight = (1.3f * scale);

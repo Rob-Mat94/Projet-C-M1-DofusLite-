@@ -6,12 +6,14 @@ Gui::Gui() : game("carte1.txt")
 {
     initTextures();
     initWindow();
+    initConfig();
 }
 
 Gui::Gui(std::string file) : game(file)
 {
     initTextures();
     initWindow();
+    initConfig();
 }
 
 Gui::~Gui()
@@ -35,7 +37,7 @@ void Gui::initWindow()
 {
     font.loadFromFile("res/yoster.ttf");
     initSize();
-    this->window = new sf::RenderWindow(sf::VideoMode(width, height + infoBarHeight), "DofusLite");
+    this->window = new sf::RenderWindow(sf::VideoMode(width, height + infoBarHeight), "DofusLite", Style::Resize | Style::Close | Style::Titlebar);
 }
 
 void Gui::initTextures()
@@ -56,6 +58,23 @@ void Gui::initSize()
 {
     this->height = game.getHeight() * scale;
     this->width = game.getWidth() * scale;
+}
+
+void Gui::initConfig()
+{
+    std::ifstream config("res/.config", std::ios::in);
+    if (config)
+    {
+        std::string line;
+        while (getline(config, line))
+        {
+            int n = line.find(":");
+            std::string first = line.substr(0, n),
+                        second = line.substr(n + 1, line.size());
+            names.push_back(first);
+            cartes.push_back(second);
+        }
+    }
 }
 
 void Gui::drawSprite(int x, int y, char c)
@@ -152,7 +171,13 @@ void Gui::drawWinner()
 void Gui::drawTitle()
 {
     Text title("DofusLite", font);
-    title.setPosition(scale * 3, scale * 2);
+    const sf::FloatRect bounds(title.getLocalBounds());
+    title.setOrigin((bounds.width - width) / 2 + bounds.left, 0);
+    title.setPosition(0, 50);
+    title.setFillColor(Color::Red);
+    title.setOutlineThickness(2);
+    title.setOutlineColor(Color::Yellow);
+    title.setStyle(Text::Style::Underlined);
     window->draw(title);
 }
 
@@ -160,18 +185,20 @@ auto Gui::getItems()
 {
     std::vector<Text> items;
     int i = 4;
-    for (auto str : cartes)
+    for (auto str : names)
     {
-        Text item("Jouer sur " + str, font, 20);
+        Text item("Jouer sur " + str, font, 25);
+        item.setFillColor(Color::Black);
         item.setPosition(scale, i * scale);
         items.push_back(item);
         i++;
     }
 
-    Text quit("Quit", font, 20);
+    Text quit("Quit", font, 25);
+    quit.setFillColor(Color::Black);
     quit.setPosition(scale, scale * i);
     items.push_back(quit);
-    items[selected].setFillColor(Color::Blue);
+    items[selected].setFillColor(Color::Yellow);
     return items;
 }
 
