@@ -1,7 +1,9 @@
 #include "../includes/Game.h"
-#include "../includes/terminalSetting.h"
 #include "../includes/Carte.h"
 #include "../includes/Team.h"
+
+// const Game::OS Game::MY_OS = Windows;
+const Game::OS Game::MY_OS = Linux;
 
 Game::Game(std::string file) : _file(file)
 {
@@ -55,7 +57,7 @@ void Game::increment()
     getCurrentTeam()->increment();
     currentTeam++;
     currentTeam = currentTeam % teamList.size();
-    pm = PM; // restore pm
+    pm = Game::PM; // restore pm
 }
 
 Team *Game::getCurrentTeam()
@@ -130,6 +132,9 @@ void Game::decrementPM()
 
 bool Game::step(char key)
 {
+    if (!running)
+        return false;
+
     switch (key)
     {
     case 'e':
@@ -152,9 +157,11 @@ bool Game::step(char key)
 
 // Les methodes et fonctions à partir de cette ligne ne sont utilisé que pour l'affichage dans le terminal linux
 
-bool Game::step()
+char getKey()
 {
-    return step(getKey());
+    char in;
+    std::cin >> in;
+    return in;
 }
 
 // 2 fonctions qui servent à afficher les infos à propos du guerrier
@@ -184,12 +191,21 @@ auto printEnemyInfo = [](Guerrier *enemy) -> void {
     }
 };
 
+bool Game::step()
+{
+    return step(getKey());
+}
+
 void Game::start()
 {
     int pm = 4;
     while (running)
     {
-        system("clear");
+        if (MY_OS == Windows)
+            system("cls");
+        else
+            system("clear");
+
         printInfo(getCurrent(), pm);
         printEnemyInfo(carte->CheckEnemy(getCurrent()));
         carte->printMap();

@@ -168,3 +168,16 @@ Guerrier *Carte::CheckEnemy(Guerrier *g)
 
     return nullptr;
 }
+
+std::vector<std::vector<char>> Carte::getMap()
+{
+    std::vector<std::vector<char>> map = {};
+    for (auto l : _map)
+    {
+        std::vector<char> m = {};
+        for (auto e : l)
+            m.push_back(e->getDraw());
+        map.push_back(m);
+    }
+    return map;
+}

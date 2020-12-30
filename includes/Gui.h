@@ -39,13 +39,13 @@ private:
     void reset();
     void reset(std::string file);
 
-    Game game;
+    Game *game;
     sf::Font font;
     sf::RenderWindow *window;
     std::map<char, sf::Texture> textures = {};
     std::vector<sf::String> cartes = {},
                             names = {};
-    int width, height;
+    int width = 500, height = 500;
     float scale = 50.f;
     float infoBarHeight = (1.3f * scale);
     int selected = 0;

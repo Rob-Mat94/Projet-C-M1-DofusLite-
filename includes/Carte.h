@@ -30,18 +30,8 @@ public:
 
     Guerrier *CheckEnemy(Guerrier *g);
 
-    std::vector<std::vector<char>> getMap()
-    {
-        std::vector<std::vector<char>> map = {};
-        for (auto l : _map)
-        {
-            std::vector<char> m = {};
-            for (auto e : l)
-                m.push_back(e->getDraw());
-            map.push_back(m);
-        }
-        return map;
-    };
+    // sert a afficher la carte dans l'interface graphique
+    std::vector<std::vector<char>> getMap();
 
 private:
     void init_map(std::ifstream &f);

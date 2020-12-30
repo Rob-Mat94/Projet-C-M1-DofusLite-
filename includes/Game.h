@@ -18,6 +18,9 @@ public:
     void reset();
     void reset(std::string file);
 
+    // utilisée en cas d'affichage en terminal
+    void start();
+
     std::vector<std::vector<char>> getMap();
     Guerrier *getCurrent();
     Guerrier *getEnemy();
@@ -31,20 +34,25 @@ public:
     void decrementPM();
 
 private:
+    enum OS
+    {
+        Windows,
+        Linux
+    };
+    static const OS MY_OS;
+
     Team *getCurrentTeam();
     auto getEmptyTeam();
     void deleteAll();
-    void start();
     bool step();
 
     Carte *carte;
     std::string _file;
-
     std::map<std::string, Team *> teamList = {};
-    int currentTeam = 0, pm = 4;
-    bool running = true;
 
     static const int PM = 4;
+    int currentTeam = 0, pm = Game::PM;
+    bool running = true;
 };
 
 #endif

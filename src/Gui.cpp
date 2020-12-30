@@ -2,14 +2,7 @@
 
 using namespace sf;
 
-Gui::Gui() : game("carte1.txt")
-{
-    initTextures();
-    initWindow();
-    initConfig();
-}
-
-Gui::Gui(std::string file) : game(file)
+Gui::Gui()
 {
     initTextures();
     initWindow();
@@ -18,26 +11,34 @@ Gui::Gui(std::string file) : game(file)
 
 Gui::~Gui()
 {
+    delete game;
     delete window;
 };
 
 void Gui::reset()
 {
-    game.reset();
-    initSize();
+    if (game == nullptr)
+        game = new Game(cartes[selected]);
+    else
+    {
+        game->reset();
+        initSize();
+    }
 }
 
 void Gui::reset(std::string file)
 {
-    game.reset(file);
+    if (game == nullptr)
+        game = new Game(file);
+    else
+        game->reset(file);
     initSize();
 }
 
 void Gui::initWindow()
 {
     font.loadFromFile("res/yoster.ttf");
-    initSize();
-    this->window = new sf::RenderWindow(sf::VideoMode(width, height + infoBarHeight), "DofusLite", Style::Resize | Style::Close | Style::Titlebar);
+    window = new sf::RenderWindow(sf::VideoMode(width, height), "DofusLite");
 }
 
 void Gui::initTextures()
@@ -56,8 +57,13 @@ void Gui::initTextures()
 
 void Gui::initSize()
 {
-    this->height = game.getHeight() * scale;
-    this->width = game.getWidth() * scale;
+    if (game != nullptr)
+    {
+        height = game->getHeight() * scale + infoBarHeight;
+        width = game->getWidth() * scale;
+    }
+    if (window != nullptr)
+        window->setSize(Vector2u(width, height));
 }
 
 void Gui::initConfig()
@@ -90,7 +96,7 @@ void Gui::drawSprite(int x, int y, char c)
 void Gui::drawMap()
 {
     drawMapBackground();
-    std::vector<std::vector<char>> map = game.getMap();
+    std::vector<std::vector<char>> map = game->getMap();
     for (std::size_t y = 0; y < map.size(); y++)
     {
         for (std::size_t x = 0; x < map[y].size(); x++)
@@ -108,11 +114,11 @@ void Gui::drawMap()
     }
 
     drawName();
-    drawInformation(*game.getCurrent(), 0, height + infoBarHeight / 15);
-    if (game.getEnemy() != nullptr)
+    drawInformation(*game->getCurrent(), 0, height - infoBarHeight);
+    if (game->getEnemy() != nullptr)
     {
-        drawInformation(*game.getEnemy(), width / 3, height + infoBarHeight / 15);
-        drawCommandInformation(width / 2 + width / 6, height + infoBarHeight / 15);
+        drawInformation(*game->getEnemy(), width / 3, height - infoBarHeight);
+        drawCommandInformation(width / 2 + width / 6, height - infoBarHeight);
     }
 }
 
@@ -140,9 +146,9 @@ void Gui::drawInformation(const Guerrier &g, int x, int y)
 
 void Gui::drawName()
 {
-    std::string name = game.getCurrent()->getName();
-    int x = game.getCurrent()->getPosition().getPosX() * scale;
-    int y = game.getCurrent()->getPosition().getPosY() * scale;
+    std::string name = game->getCurrent()->getName();
+    int x = game->getCurrent()->getPosition().getPosX() * scale;
+    int y = game->getCurrent()->getPosition().getPosY() * scale;
     drawText(name, x, y);
 }
 
@@ -158,25 +164,38 @@ void Gui::drawCommandInformation(int x, int y)
 
 void Gui::drawWinner()
 {
-    int y = (game.getHeight() * scale) / 2;
+    std::string str = "** " + game->getWinner() + " ** Press Escape to go to main menu, or R to restart !";
+    sf::Text text(str, font, 15);
+    sf::FloatRect bounds(text.getLocalBounds());
 
-    RectangleShape shape(Vector2f(game.getWidth() * scale, scale));
+    RectangleShape shape({bounds.width + 10, bounds.height + 10});
     shape.setFillColor(Color::Black);
-    shape.setPosition(0, y + 4);
+
+    // aggrandir la fenetre si le text ne rentre pas
+    if (bounds.width + 10 > window->getSize().x)
+        window->setSize({(unsigned int)bounds.width + 10, window->getSize().y});
+
+    // Sert a centrer le text
+    int x = (bounds.width - window->getSize().x) / 2 + bounds.left,
+        y = (bounds.height - window->getSize().y) / 2 + bounds.top,
+        x2 = (bounds.width - 10 - window->getSize().x) / 2 + bounds.left + 10,
+        y2 = (bounds.height - 10 - window->getSize().y) / 2 + bounds.top + 10;
+
+    text.setOrigin(x, y);
+    shape.setOrigin(x2, y2);
     window->draw(shape);
-    std::string str = "\n\t*" + game.getWinner() + "*\tPress Escape to go to main menu, or R to restart !";
-    drawText(str, 0, y);
+    window->draw(text);
 }
 
 void Gui::drawTitle()
 {
     Text title("DofusLite", font);
     const sf::FloatRect bounds(title.getLocalBounds());
-    title.setOrigin((bounds.width - width) / 2 + bounds.left, 0);
-    title.setPosition(0, 50);
+    title.setOrigin((bounds.width - window->getSize().x) / 2 + bounds.left, 0);
+    title.setPosition(0, scale);
     title.setFillColor(Color::Red);
     title.setOutlineThickness(2);
-    title.setOutlineColor(Color::Yellow);
+    title.setOutlineColor(Color::Green);
     title.setStyle(Text::Style::Underlined);
     window->draw(title);
 }
@@ -184,21 +203,19 @@ void Gui::drawTitle()
 auto Gui::getItems()
 {
     std::vector<Text> items;
-    int i = 4;
+    int i = 150;
     for (auto str : names)
     {
-        Text item("Jouer sur " + str, font, 25);
-        item.setFillColor(Color::Black);
-        item.setPosition(scale, i * scale);
+        Text item(str, font, 25);
+        item.setPosition(scale, i);
         items.push_back(item);
-        i++;
+        i += 50;
     }
 
-    Text quit("Quit", font, 25);
-    quit.setFillColor(Color::Black);
-    quit.setPosition(scale, scale * i);
+    Text quit("Quitter", font, 25);
+    quit.setPosition(scale, i);
     items.push_back(quit);
-    items[selected].setFillColor(Color::Yellow);
+    items[selected].setFillColor(Color::Green);
     return items;
 }
 
@@ -222,6 +239,11 @@ void Gui::displayMenu()
         {
             if (event.type == sf::Event::Closed)
                 window->close();
+            if (event.type == sf::Event::Resized)
+            {
+                sf::FloatRect view(0, 0, window->getSize().x, window->getSize().y);
+                window->setView(View(view));
+            }
             if (event.type == sf::Event::KeyPressed)
                 switch (event.key.code)
                 {
@@ -252,7 +274,11 @@ void Gui::displayMenu()
 
 void Gui::setSelected(int i)
 {
-    selected = (selected + i) % (cartes.size() + 1);
+    selected = (selected + i);
+    if (selected < 0)
+        selected = cartes.size();
+    if ((size_t)selected > cartes.size())
+        selected = 0;
 }
 
 bool Gui::step()
@@ -262,6 +288,11 @@ bool Gui::step()
     {
         if (event.type == sf::Event::Closed)
             window->close();
+        if (event.type == sf::Event::Resized)
+        {
+            sf::FloatRect view(0, 0, window->getSize().x, window->getSize().y);
+            window->setView(View(view));
+        }
         if (event.type == sf::Event::KeyPressed)
             switch (event.key.code)
             {
@@ -273,17 +304,17 @@ bool Gui::step()
                 start();
                 break;
             case sf::Keyboard::Z:
-                return game.step('z');
+                return game->step('z');
             case sf::Keyboard::S:
-                return game.step('s');
+                return game->step('s');
             case sf::Keyboard::Q:
-                return game.step('q');
+                return game->step('q');
             case sf::Keyboard::D:
-                return game.step('d');
+                return game->step('d');
             case sf::Keyboard::Y:
-                if (game.step('y'))
+                if (game->step('y'))
                 {
-                    game.increment();
+                    game->increment();
                     return true;
                 }
                 else
@@ -299,14 +330,14 @@ void Gui::start()
 {
     while (window->isOpen())
     {
-        game.isGameOver();
+        game->isGameOver();
         window->clear();
         drawMap();
 
         if (step())
-            game.decrementPM();
+            game->decrementPM();
 
-        if (!game.isRunnig())
+        if (!game->isRunnig())
             drawWinner();
 
         window->display();
