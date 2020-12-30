@@ -1,18 +1,21 @@
 # Fichiers et dossier à ne pas mettre sur git
 
-#Tout fichier .o ou .out
+#Tout fichier .o ou .out ou .exe
 *.o
 *.out
 *.exe
 
-# Dossier des .o
+# Dossier des objets .o
 **/obj
 
 # Dossier des executables
 **/bin
 
 #fichier settings vscode
-.vscode/settings.json
+**/.vscode
+**/.vs
 
 #fichier test
 test.cpp
+test
+test.exe
