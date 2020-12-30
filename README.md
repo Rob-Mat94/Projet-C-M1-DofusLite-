@@ -1,4 +1,4 @@
-######################## DofusLite ########################
+	######################## DofusLite ########################
 
 	Il s'agit d'un jeu de role de type joueur contre joueur (JcJ).
 
