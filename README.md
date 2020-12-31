@@ -29,13 +29,25 @@
 			* Executer l'executable généré dans le dossier bin avec la commande ./bin/game
 
 		Sur Windows (Visual Studio 2019):
+			* Créer un nouveau projet vide puis copier les dossiers src, include, res ainsi que le fichier main.cpp dans le répértoire du projet
+			* Dans l'explorateur de solutions de visual studio cliquer sur afficher tout les fichiers et pour chacun des dossiers includes et src ainsi que le fichier main.cpp faire un clique droit et séléctionner inclure dans le projet
 			* Télécharger SFML sur le site suivant: https://www.sfml-dev.org/download.php
 			* Suivre le tuto configuration SFML suivant: https://www.sfml-dev.org/tutorials/2.5/start-vc.php
+				Dans le menu projet -> propriétées du projet:
+
+				pour toutes les configurations:
+					Dans C/C++ -> général -> autres répértoires include: ajouter l'emplacement de SFML\include exemple: c:\SFML\include
+					Dans C/C++ -> préprocesseur -> définitions de préprocesseur: ajouter SFML_STATIC;
+					Dans editeur de liens -> général -> répértoires de bibliothèques supplémentaires: ajouter l'emplacement de SFML\lib exemple: c:\SFML\lib
+
+				Dans editeur de liens -> entrée -> dépendances supplémentaires:
+					Pour la configuration release: ajouter sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;winmm.lib;opengl32.lib;freetype.lib;gdi32.lib;
+					Pour la configuration debug: ajouter sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;winmm.lib;opengl32.lib;freetype.lib;gdi32.lib;
 
 		Fichiers du jeu:
 			Le fichier .config contenu dans le dossier res sert a configurer le menu du jeu: 
-				* Chaque ligne contien le nom qui apparait dans le menu et le nom du fichier qui contient la carte avec la syntaxe suivante: "nom:carte"
-				* Chaque carte doit etre situé dans le dossier res
+				* Chaque ligne contien le nom qui apparait dans le menu et le nom du fichier qui contient la carte avec la syntaxe suivante: nom:carte
+				* Chaque fichier contenant une carte doit etre situé dans le dossier res
 
 		Affichage sans interface graphique (dans le terminal):
 			Le jeu peut etre affiché dans le terminal Linux ou Windows pour cela il suffit de remplacer le code du main par le code qui est mis en commentaire
