@@ -138,8 +138,8 @@ bool Game::step(char key)
     switch (key)
     {
     case 'e':
-        running = false;
-        return true;
+        exit(0);
+        break;
     case 'z':
         return getCurrent()->move(Up, carte);
     case 's':
@@ -149,10 +149,15 @@ bool Game::step(char key)
     case 'd':
         return getCurrent()->move(Right, carte);
     case 'y':
-        return getCurrent()->Attack(carte->CheckEnemy(getCurrent()), carte);
-    default:
-        return false;
+        if (getCurrent()->Attack(getEnemy(), carte))
+        {
+            increment();
+            return true;
+        }
+        else
+            return false;
     }
+    return false;
 }
 
 // Les methodes et fonctions à partir de cette ligne ne sont utilisé que pour l'affichage dans le terminal linux
@@ -198,7 +203,6 @@ bool Game::step()
 
 void Game::start()
 {
-    int pm = 4;
     while (running)
     {
         if (MY_OS == Windows)
@@ -207,23 +211,16 @@ void Game::start()
             system("clear");
 
         printInfo(getCurrent(), pm);
-        printEnemyInfo(carte->CheckEnemy(getCurrent()));
+        printEnemyInfo(getEnemy());
         carte->printMap();
         if (step())
-        {
-            pm--;
-            if (pm == 0)
-            {
-                pm = 4;
-                increment();
-            }
-        }
+            decrementPM();
         isGameOver();
     }
 
     system("clear");
     printInfo(getCurrent(), pm);
-    printEnemyInfo(carte->CheckEnemy(getCurrent()));
+    printEnemyInfo(getEnemy());
     carte->printMap();
     std::cout << "\n" + getWinner() + "\n";
 }

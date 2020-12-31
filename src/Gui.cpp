@@ -312,13 +312,7 @@ bool Gui::step()
             case sf::Keyboard::D:
                 return game->step('d');
             case sf::Keyboard::Y:
-                if (game->step('y'))
-                {
-                    game->increment();
-                    return true;
-                }
-                else
-                    return false;
+                return game->step('y');
             default:
                 return false;
             }
