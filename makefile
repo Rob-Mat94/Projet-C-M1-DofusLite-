@@ -1,5 +1,5 @@
-CPP=g++
-CFLAGS= -I$(HEADDIR) -g -Wall -Werror
+CPP= g++
+CFLAGS= -I$(HEADDIR) -g -Wall
 # option pour l'interface graphique sfml
 GFLAGS= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 
@@ -30,6 +30,4 @@ $(LIBDIR)/%.o: $(SRCDIR)/%.cpp $(HEADDIR)/%.h
 clean:
 	rm -f $(LIBDIR)/*.o
 	rm -f *.o
-
-Clean: clean
 	rm -f $(BINDIR)/*
