@@ -16,6 +16,8 @@ class Carte
 {
 public:
     Carte(std::string file_name, Game *game);
+    Carte(const Carte &) = delete;
+    Carte &operator=(const Carte &) = delete;
     virtual ~Carte();
 
     const int getWidth() const { return this->_width; }

@@ -12,6 +12,9 @@ class Game
 {
 public:
     Game(std::string file);
+    Game(const Game &) = delete;
+    Game &operator=(const Game &) = delete;
+
     virtual ~Game();
     void addGuerrier(Guerrier *g);
     void removeGuerrier(Guerrier *g);

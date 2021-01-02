@@ -8,6 +8,8 @@ class Gui
 {
 public:
     Gui();
+    Gui(const Gui &) = delete;
+    Gui &operator=(const Gui &) = delete;
     virtual ~Gui();
 
     void launch();
@@ -38,14 +40,14 @@ private:
     void reset();
     void reset(std::string file);
 
-    Game *game;
+    Game *game = nullptr;
     sf::Font font;
-    sf::RenderWindow *window;
+    sf::RenderWindow *window = nullptr;
     std::map<char, sf::Texture> textures = {};
     std::vector<sf::String> cartes = {},
                             names = {};
     int width = 500, height = 500;
-    float scale = 50.f;
+    float scale = 45.f;
     float infoBarHeight = (1.3f * scale);
     int selected = 0;
 };
