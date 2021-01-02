@@ -44,8 +44,7 @@ private:
     sf::Font font;
     sf::RenderWindow *window = nullptr;
     std::map<char, sf::Texture> textures = {};
-    std::vector<sf::String> cartes = {},
-                            names = {};
+    std::vector<std::string> cartes = {}, names = {};
     int width = 500, height = 500;
     float scale = 45.f;
     float infoBarHeight = (1.3f * scale);

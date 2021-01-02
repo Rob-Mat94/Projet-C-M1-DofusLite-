@@ -116,6 +116,7 @@ void Carte::addElement(Element *e)
 void Carte::removeElement(Element *e)
 {
     addElement(new EmptyElement(e->getPosition()));
+    // au cas ou c'est un guerrier il sera supprimé aussi dans game !
     _game->removeGuerrier(dynamic_cast<Guerrier *>(e));
     delete e;
 }

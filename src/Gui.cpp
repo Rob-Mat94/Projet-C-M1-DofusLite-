@@ -127,7 +127,11 @@ void Gui::drawMapBackground()
 {
     Sprite s;
     s.setTexture(textures['M']);
-    s.scale(2, 2);
+    float x1 = (float)window->getSize().x,
+          y1 = (float)window->getSize().y,
+          x2 = (float)textures['M'].getSize().x,
+          y2 = (float)textures['M'].getSize().y;
+    s.scale(x1 / x2, y1 / y2);
     window->draw(s);
 }
 
