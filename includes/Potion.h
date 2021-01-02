@@ -10,7 +10,7 @@ public:
 
     const int getHpToGive() const { return _hp_to_give; }
 
-    char getDraw() { return _hp_to_give + '0'; }
+    char getDraw() { return _hp_to_give / 10 + '0'; }
     void pickUpElement(Guerrier *g);
 
 private:

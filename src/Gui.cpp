@@ -159,7 +159,7 @@ void Gui::drawName()
 
 void Gui::drawStat(int x, int y, char stat)
 {
-    drawText({stat}, x * scale, y * scale - 12);
+    drawText({stat, '0'}, x * scale, y * scale - 12);
 }
 
 void Gui::drawCommandInformation(int x, int y)

@@ -16,12 +16,7 @@ Carte::Carte(std::string file_name, Game *game)
     {
         file_map >> this->_width;
         file_map >> this->_height;
-
-        std::vector<Element *> temp_vec;
-        for (int i = 0; i < _width; i++)
-            temp_vec.push_back(0);
-        for (int i = 0; i < this->_height; i++)
-            this->_map.push_back(temp_vec);
+        _map = std::vector<std::vector<Element *>>(_height, std::vector<Element *>(_width, 0));
 
         file_map.ignore();
         init_map(file_map);
@@ -79,7 +74,7 @@ void Carte ::init_map(std::ifstream &f)
                 break;
             default:
                 if (line[x] >= '0' && line[x] <= '9')
-                    addElement(new Potion(line[x] - 48, Position(x, y)));
+                    addElement(new Potion((line[x] - 48) * 10, Position(x, y)));
                 else
                 {
                     std::cerr << "Erreur dans .txt" << std::endl;
