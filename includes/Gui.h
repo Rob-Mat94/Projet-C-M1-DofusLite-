@@ -9,7 +9,6 @@ class Gui
 public:
     Gui();
     virtual ~Gui();
-    Gui(std::string file);
 
     void launch();
 
