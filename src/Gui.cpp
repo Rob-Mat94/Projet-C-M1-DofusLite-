@@ -245,6 +245,10 @@ void Gui::displayMenu()
 {
     while (_window->isOpen())
     {
+        // recommencer la musique si elle s'arrête
+        if (music.getStatus() == Music::Status::Stopped)
+            restartMusic();
+
         drawMenu();
         Event event;
         while (_window->pollEvent(event))
@@ -319,7 +323,7 @@ bool Gui::step()
 {
     // recommencer la musique si elle s'arrête
     if (music.getStatus() == Music::Status::Stopped)
-        music.play();
+        restartMusic();
 
     sf::Event event;
     while (_window->pollEvent(event))
