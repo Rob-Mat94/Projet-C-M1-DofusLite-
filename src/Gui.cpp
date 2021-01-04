@@ -61,7 +61,6 @@ void Gui::initMusic()
 {
     if (!music.openFromFile("res/song.ogg"))
         std::cout << "le fichier song.ogg est introuvable)";
-    music.setVolume(15);
 }
 
 void Gui::initSize()
@@ -308,6 +307,10 @@ void Gui::setMusicPlayPause()
 
 bool Gui::step()
 {
+    // recommencer la musique si elle s'arrête
+    if (music.getStatus() == Music::Status::Stopped)
+        music.play();
+
     sf::Event event;
     while (_window->pollEvent(event))
     {
@@ -338,6 +341,9 @@ bool Gui::step()
                 return _game->step('d');
             case sf::Keyboard::Y:
                 return _game->step('y');
+            case sf::Keyboard::P:
+                setMusicPlayPause();
+                break;
             default:
                 return false;
             }
@@ -365,6 +371,6 @@ void Gui::start()
 
 void Gui::launch()
 {
-    setMusicPlayPause();
+    music.play();
     displayMenu();
 }

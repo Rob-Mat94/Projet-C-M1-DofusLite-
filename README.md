@@ -44,6 +44,8 @@
 				Dans editeur de liens -> entrée -> dépendances supplémentaires :
 					Pour la configuration release: ajouter sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;sfml-audio-s.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;winmm.lib;opengl32.lib;freetype.lib;gdi32.lib;
 					Pour la configuration debug: ajouter sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-audio-s-d.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;winmm.lib;opengl32.lib;freetype.lib;gdi32.lib;
+					
+				Copier le fichier SFML/bin/openal.dll dans le dossier Debug et/ou Release de votre projet (le créer si'il n'existe pas) suivant votre configuration de solution
 
 		Fichiers du jeu:
 			Le fichier .config contenu dans le dossier res sert à configurer le menu du jeu:
