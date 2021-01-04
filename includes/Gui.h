@@ -31,6 +31,7 @@ private:
     void displayMenu();
     void setSelected(int i);
     void setMusicPlayPause();
+    void restartMusic();
     void start();
     bool step();
 

@@ -309,6 +309,12 @@ void Gui::setMusicPlayPause()
     }
 }
 
+void Gui::restartMusic()
+{
+    music.stop();
+    music.play();
+}
+
 bool Gui::step()
 {
     // recommencer la musique si elle s'arrête
@@ -347,6 +353,9 @@ bool Gui::step()
                 return _game->step('y');
             case sf::Keyboard::P:
                 setMusicPlayPause();
+                break;
+            case sf::Keyboard::M:
+                restartMusic();
                 break;
             default:
                 return false;
