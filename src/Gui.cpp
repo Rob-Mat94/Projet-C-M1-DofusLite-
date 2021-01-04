@@ -302,7 +302,8 @@ void Gui::setMusicPlayPause()
     {
     case sf::Music::Playing:
         music.pause();
-    case sf::Music::Paused:
+        break;
+    default:
         music.play();
         break;
     }
