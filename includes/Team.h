@@ -11,7 +11,7 @@ class Team
 {
 
 public:
-    Team() : _list({}), current(0){};
+    Team() : _list({}), _current(0){};
     virtual ~Team() = default;
     void addGuerrier(Guerrier *g);
     void removeGuerrier(Guerrier *g);
@@ -21,7 +21,7 @@ public:
 
 private:
     std::list<Guerrier *> _list;
-    int current;
+    int _current;
 };
 
 #endif

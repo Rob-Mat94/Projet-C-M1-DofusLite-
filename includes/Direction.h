@@ -11,8 +11,8 @@ enum Direction
 
 struct Coordinate
 {
-    int x;
-    int y;
+    int _x;
+    int _y;
 };
 
 Coordinate getDirCoordinate(Direction dir);

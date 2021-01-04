@@ -12,8 +12,8 @@ public:
 
     /* Méthodes héritées */
     /* Représentation (caractère pour l'instant) */
-    char getDraw() { return '*'; }
-    bool isEmpty() { return false; }
+    char getDraw() const { return '*'; }
+    bool isEmpty() const { return false; }
 };
 
 #endif

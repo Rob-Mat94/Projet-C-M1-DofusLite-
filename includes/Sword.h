@@ -9,9 +9,9 @@ public:
     virtual ~Sword() = default;
 
     const int getStat() const { return _stat; }
-    char getDraw() { return 'S'; }
+    char getDraw() const { return 'S'; }
 
-    void pickUpElement(Guerrier *g);
+    void pickUpElement(Guerrier *g) const;
 
 private:
     const int _stat;

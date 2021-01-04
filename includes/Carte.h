@@ -25,15 +25,18 @@ public:
 
     void addElement(Element *e);
     void removeElement(Element *e);
-    void printMap() const;
 
-    bool canMove(Position oldPos, Position newPos);
+    // sert a bouger le guerrier
+    bool canMove(Position oldPos, Position newPos) const;
     bool updatePos(Guerrier *g, Position oldPos, Position newPos);
 
-    Guerrier *CheckEnemy(Guerrier *g);
+    // renvoi le'enemi le plus proche
+    Guerrier *checkEnemy(Guerrier *g);
 
     // sert a afficher la carte dans l'interface graphique
-    std::vector<std::vector<char>> getMap();
+    std::vector<std::vector<char>> getMap() const;
+    // sert a afficher la carte dans le terminal
+    void printMap() const;
 
 private:
     void init_map(std::ifstream &f);

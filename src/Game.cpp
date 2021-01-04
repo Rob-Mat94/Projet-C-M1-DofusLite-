@@ -7,23 +7,23 @@ const Game::OS Game::MY_OS = Linux;
 
 Game::Game(std::string file) : _file(file)
 {
-    carte = new Carte(_file, this);
+    _carte = new Carte(_file, this);
 }
 
 void Game::deleteAll()
 {
-    delete carte;
-    for (auto e : teamList)
+    delete _carte;
+    for (auto e : _teamList)
         delete e.second;
 }
 
 void Game::reset()
 {
     deleteAll();
-    this->currentTeam = 0;
-    this->running = true;
-    this->teamList = {};
-    carte = new Carte(_file, this);
+    this->_currentTeam = 0;
+    this->_running = true;
+    this->_teamList = {};
+    _carte = new Carte(_file, this);
 }
 
 void Game::reset(std::string file)
@@ -44,95 +44,96 @@ Guerrier *Game::getCurrent()
 
 auto Game::getEmptyTeam()
 {
-    for (auto it = teamList.begin(); it != teamList.end(); it++)
+    for (auto it = _teamList.begin(); it != _teamList.end(); it++)
     {
         if (it->second->guerriersRestants() <= 0)
             return it;
     }
-    return teamList.end();
+    return _teamList.end();
 }
 
 void Game::increment()
 {
     getCurrentTeam()->increment();
-    currentTeam++;
-    currentTeam = currentTeam % teamList.size();
-    pm = Game::PM; // restore pm
+    _currentTeam++;
+    _currentTeam = _currentTeam % _teamList.size();
+    _pm = Game::PM; // restore pm
 }
 
 Team *Game::getCurrentTeam()
 {
-    if (teamList.empty())
+    if (_teamList.empty())
         return nullptr;
 
-    currentTeam = currentTeam % teamList.size();
-    auto it = teamList.begin();
-    std::advance(it, currentTeam);
+    _currentTeam = _currentTeam % _teamList.size();
+    auto it = _teamList.begin();
+    std::advance(it, _currentTeam);
 
     return it->second;
 }
 
 void Game::addGuerrier(Guerrier *g)
 {
-    if (teamList.find(g->getTeam()) == teamList.end())
-        teamList[g->getTeam()] = new Team();
-    teamList[g->getTeam()]->addGuerrier(g);
+    if (_teamList.find(g->getTeam()) == _teamList.end())
+        _teamList[g->getTeam()] = new Team();
+    _teamList[g->getTeam()]->addGuerrier(g);
 }
 
 void Game::removeGuerrier(Guerrier *g)
 {
-    teamList[g->getTeam()]->removeGuerrier(g);
+    _teamList[g->getTeam()]->removeGuerrier(g);
 }
 
 void Game::isGameOver()
 {
-    if (getEmptyTeam() != teamList.end())
-        teamList.erase(getEmptyTeam());
-    running = teamList.size() > 1;
+    if (getEmptyTeam() != _teamList.end())
+        _teamList.erase(getEmptyTeam());
+    _running = _teamList.size() > 1;
 }
 
-bool Game::isRunnig()
+bool Game::isRunnig() const
 {
-    return running;
+    return _running;
 };
 
-std::string Game::getWinner()
+std::string Game::getWinner() const
 {
-    if (running)
+    if (_running)
         return "No Winner";
-    return teamList.begin()->first + " Wins";
+    return _teamList.begin()->first + " Wins";
 }
 
-std::vector<std::vector<char>> Game::getMap()
+std::vector<std::vector<char>> Game::getMap() const
 {
-    return carte->getMap();
+    return _carte->getMap();
 }
 
-int Game::getHeight()
+int Game::getHeight() const
 {
-    return carte->getHeight();
+    return _carte->getHeight();
 }
 
-int Game::getWidth()
+int Game::getWidth() const
 {
-    return carte->getWidth();
+    return _carte->getWidth();
 }
 
 Guerrier *Game::getEnemy()
 {
-    return carte->CheckEnemy(getCurrent());
+    return _carte->checkEnemy(getCurrent());
 }
 
 void Game::decrementPM()
 {
-    pm--;
-    if (pm <= 0)
+
+    _pm--;
+    if (_pm <= 0)
         increment();
 }
 
 bool Game::step(char key)
 {
-    if (!running)
+    if (!_running)
         return false;
 
     switch (key)
@@ -141,15 +142,15 @@ bool Game::step(char key)
         exit(0);
         break;
     case 'z':
-        return getCurrent()->move(Up, carte);
+        return getCurrent()->move(Up, _carte);
     case 's':
-        return getCurrent()->move(Down, carte);
+        return getCurrent()->move(Down, _carte);
     case 'q':
-        return getCurrent()->move(Left, carte);
+        return getCurrent()->move(Left, _carte);
     case 'd':
-        return getCurrent()->move(Right, carte);
+        return getCurrent()->move(Right, _carte);
     case 'y':
-        if (getCurrent()->Attack(getEnemy(), carte))
+        if (getCurrent()->Attack(getEnemy(), _carte))
         {
             increment();
             return true;
@@ -203,24 +204,24 @@ bool Game::step()
 
 void Game::start()
 {
-    while (running)
+    while (_running)
     {
         if (MY_OS == Windows)
             system("cls");
         else
             system("clear");
 
-        printInfo(getCurrent(), pm);
+        printInfo(getCurrent(), _pm);
         printEnemyInfo(getEnemy());
-        carte->printMap();
+        _carte->printMap();
         if (step())
             decrementPM();
         isGameOver();
     }
 
     system("clear");
-    printInfo(getCurrent(), pm);
+    printInfo(getCurrent(), _pm);
     printEnemyInfo(getEnemy());
-    carte->printMap();
+    _carte->printMap();
     std::cout << "\n" + getWinner() + "\n";
 }

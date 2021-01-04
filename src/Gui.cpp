@@ -11,60 +11,60 @@ Gui::Gui()
 
 Gui::~Gui()
 {
-    delete game;
-    delete window;
+    delete _game;
+    delete _window;
 };
 
 void Gui::reset()
 {
-    if (game == nullptr)
-        game = new Game(cartes[selected]);
+    if (_game == nullptr)
+        _game = new Game(_mapFiles[_selected]);
     else
     {
-        game->reset();
+        _game->reset();
         initSize();
     }
 }
 
 void Gui::reset(std::string file)
 {
-    if (game == nullptr)
-        game = new Game(file);
+    if (_game == nullptr)
+        _game = new Game(file);
     else
-        game->reset(file);
+        _game->reset(file);
     initSize();
 }
 
 void Gui::initWindow()
 {
-    font.loadFromFile("res/yoster.ttf");
-    window = new sf::RenderWindow(sf::VideoMode(width, height), "DofusLite");
-    window->setPosition({0, 25});
+    _font.loadFromFile("res/yoster.ttf");
+    _window = new sf::RenderWindow(sf::VideoMode(_width, _height), "DofusLite");
+    _window->setPosition({0, 25});
 }
 
 void Gui::initTextures()
 {
-    textures['G'].loadFromFile("res/team1.png");
-    textures['g'].loadFromFile("res/team2.png");
-    textures['p'].loadFromFile("res/potion.png");
-    textures['A'].loadFromFile("res/armor.png");
-    textures['S'].loadFromFile("res/sword.png");
-    textures['M'].loadFromFile("res/map.jpg");
-    textures['*'].loadFromFile("res/wall.jpg");
+    _textures['G'].loadFromFile("res/team1.png");
+    _textures['g'].loadFromFile("res/team2.png");
+    _textures['p'].loadFromFile("res/potion.png");
+    _textures['A'].loadFromFile("res/armor.png");
+    _textures['S'].loadFromFile("res/sword.png");
+    _textures['M'].loadFromFile("res/map.jpg");
+    _textures['*'].loadFromFile("res/wall.jpg");
 
-    for (auto t : textures)
+    for (auto t : _textures)
         t.second.setSmooth(true);
 }
 
 void Gui::initSize()
 {
-    if (game != nullptr)
+    if (_game != nullptr)
     {
-        height = game->getHeight() * scale + infoBarHeight;
-        width = game->getWidth() * scale;
+        _height = _game->getHeight() * _scale + _infoBarHeight;
+        _width = _game->getWidth() * _scale;
     }
-    if (window != nullptr)
-        window->setSize(Vector2u(width, height));
+    if (_window != nullptr)
+        _window->setSize(Vector2u(_width, _height));
 }
 
 void Gui::initConfig()
@@ -78,26 +78,26 @@ void Gui::initConfig()
             int n = line.find(":");
             std::string first = line.substr(0, n),
                         second = line.substr(n + 1, line.size());
-            names.push_back(first);
-            cartes.push_back(second);
+            _mapNames.push_back(first);
+            _mapFiles.push_back(second);
         }
     }
 }
 
-void Gui::drawSprite(int x, int y, char c)
+void Gui::drawSprite(int x, int y, char c) const
 {
     Sprite sprite;
-    sprite.setTexture(textures[c]);
-    sprite.scale((scale / textures[c].getSize().x), (scale / textures[c].getSize().y));
-    sprite.setPosition(scale * x, scale * y);
+    sprite.setTexture(_textures.at(c));
+    sprite.scale((_scale / _textures.at(c).getSize().x), (_scale / _textures.at(c).getSize().y));
+    sprite.setPosition(_scale * x, _scale * y);
 
-    window->draw(sprite);
+    _window->draw(sprite);
 }
 
-void Gui::drawMap()
+void Gui::drawMap() const
 {
     drawMapBackground();
-    std::vector<std::vector<char>> map = game->getMap();
+    std::vector<std::vector<char>> map = _game->getMap();
     for (std::size_t y = 0; y < map.size(); y++)
     {
         for (std::size_t x = 0; x < map[y].size(); x++)
@@ -115,145 +115,145 @@ void Gui::drawMap()
     }
 
     drawName();
-    drawInformation(*game->getCurrent(), 0, height - infoBarHeight);
-    if (game->getEnemy() != nullptr)
+    drawInformation(*_game->getCurrent(), 0, _height - _infoBarHeight);
+    if (_game->getEnemy() != nullptr)
     {
-        drawInformation(*game->getEnemy(), width / 3, height - infoBarHeight);
-        drawCommandInformation(width / 2 + width / 6, height - infoBarHeight);
+        drawInformation(*_game->getEnemy(), _width / 3, _height - _infoBarHeight);
+        drawCommandInformation(_width / 2 + _width / 6, _height - _infoBarHeight);
     }
 }
 
-void Gui::drawMapBackground()
+void Gui::drawMapBackground() const
 {
     Sprite s;
-    s.setTexture(textures['M']);
-    float x1 = (float)window->getSize().x,
-          y1 = (float)window->getSize().y,
-          x2 = (float)textures['M'].getSize().x,
-          y2 = (float)textures['M'].getSize().y;
+    s.setTexture(_textures.at('M'));
+    float x1 = (float)_window->getSize().x,
+          y1 = (float)_window->getSize().y,
+          x2 = (float)_textures.at('M').getSize().x,
+          y2 = (float)_textures.at('M').getSize().y;
     s.scale(x1 / x2, y1 / y2);
-    window->draw(s);
+    _window->draw(s);
 }
 
-void Gui::drawText(std::string str, int x, int y)
+void Gui::drawText(std::string str, int x, int y) const
 {
-    sf::Text text(str, font, 12);
+    sf::Text text(str, _font, 12);
     text.setPosition(x, y);
-    window->draw(text);
+    _window->draw(text);
 }
 
-void Gui::drawInformation(const Guerrier &g, int x, int y)
+void Gui::drawInformation(const Guerrier &g, int x, int y) const
 {
     /* Name / Hp / Attack / Def*/
     std::string info = "#Name : " + g.getName() + "\n" + std::to_string(g.getHp()) + " HP\n" + std::to_string(g.getCapAttack()) + " Attack damage\n" + std::to_string(g.getCapDef()) + " Defense";
     drawText(info, x, y);
 }
 
-void Gui::drawName()
+void Gui::drawName() const
 {
-    std::string name = game->getCurrent()->getName();
-    int x = game->getCurrent()->getPosition().getPosX() * scale;
-    int y = game->getCurrent()->getPosition().getPosY() * scale;
+    std::string name = _game->getCurrent()->getName();
+    int x = _game->getCurrent()->getPosition().getPosX() * _scale;
+    int y = _game->getCurrent()->getPosition().getPosY() * _scale;
     drawText(name, x, y);
 }
 
-void Gui::drawStat(int x, int y, char stat)
+void Gui::drawStat(int x, int y, char stat) const
 {
-    drawText({stat, '0'}, x * scale, y * scale - 12);
+    drawText({stat, '0'}, x * _scale, y * _scale - 12);
 }
 
-void Gui::drawCommandInformation(int x, int y)
+void Gui::drawCommandInformation(int x, int y) const
 {
     drawText("Press Y to attack", x, y);
 }
 
-void Gui::drawWinner()
+void Gui::drawWinner() const
 {
-    std::string str = "** " + game->getWinner() + " ** Press Escape to go to main menu, or R to restart !";
-    sf::Text text(str, font, 15);
+    std::string str = "** " + _game->getWinner() + " ** Press Escape to go to main menu, or R to restart !";
+    sf::Text text(str, _font, 15);
     sf::FloatRect bounds(text.getLocalBounds());
 
     RectangleShape shape({bounds.width + 10, bounds.height + 10});
     shape.setFillColor(Color::Black);
 
     // aggrandir la fenetre si le text ne rentre pas
-    if (bounds.width + 10 > window->getSize().x)
-        window->setSize({(unsigned int)bounds.width + 10, window->getSize().y});
+    if (bounds.width + 10 > _window->getSize().x)
+        _window->setSize({(unsigned int)bounds.width + 10, _window->getSize().y});
 
     // Sert a centrer le text
-    int x = (bounds.width - window->getSize().x) / 2 + bounds.left,
-        y = (bounds.height - window->getSize().y) / 2 + bounds.top,
-        x2 = (bounds.width - 10 - window->getSize().x) / 2 + bounds.left + 10,
-        y2 = (bounds.height - 10 - window->getSize().y) / 2 + bounds.top + 10;
+    int x = (bounds.width - _window->getSize().x) / 2 + bounds.left,
+        y = (bounds.height - _window->getSize().y) / 2 + bounds.top,
+        x2 = (bounds.width - 10 - _window->getSize().x) / 2 + bounds.left + 10,
+        y2 = (bounds.height - 10 - _window->getSize().y) / 2 + bounds.top + 10;
 
     text.setOrigin(x, y);
     shape.setOrigin(x2, y2);
-    window->draw(shape);
-    window->draw(text);
+    _window->draw(shape);
+    _window->draw(text);
 }
 
-void Gui::drawTitle()
+void Gui::drawTitle() const
 {
-    Text title("DofusLite", font);
+    Text title("DofusLite", _font);
     const sf::FloatRect bounds(title.getLocalBounds());
-    title.setOrigin((bounds.width - window->getSize().x) / 2 + bounds.left, 0);
-    title.setPosition(0, scale);
+    title.setOrigin((bounds.width - _window->getSize().x) / 2 + bounds.left, 0);
+    title.setPosition(0, _scale);
     title.setFillColor(Color::Red);
     title.setOutlineThickness(2);
     title.setOutlineColor(Color::Green);
     title.setStyle(Text::Style::Underlined);
-    window->draw(title);
+    _window->draw(title);
 }
 
-auto Gui::getItems()
+auto Gui::getItems() const
 {
     std::vector<Text> items;
     int i = 150;
-    for (auto str : names)
+    for (auto str : _mapNames)
     {
-        Text item(str, font, 25);
-        item.setPosition(scale, i);
+        Text item(str, _font, 25);
+        item.setPosition(_scale, i);
         items.push_back(item);
         i += 50;
     }
 
-    Text quit("Quitter", font, 25);
-    quit.setPosition(scale, i);
+    Text quit("Quitter", _font, 25);
+    quit.setPosition(_scale, i);
     items.push_back(quit);
-    items[selected].setFillColor(Color::Green);
+    items[_selected].setFillColor(Color::Green);
     return items;
 }
 
-void Gui::drawMenu()
+void Gui::drawMenu() const
 {
-    window->clear();
+    _window->clear();
     drawMapBackground();
     drawTitle();
     for (auto item : getItems())
-        window->draw(item);
-    window->display();
+        _window->draw(item);
+    _window->display();
 }
 
 void Gui::displayMenu()
 {
-    while (window->isOpen())
+    while (_window->isOpen())
     {
         drawMenu();
         Event event;
-        while (window->pollEvent(event))
+        while (_window->pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
-                window->close();
+                _window->close();
             if (event.type == sf::Event::Resized)
             {
-                sf::FloatRect view(0, 0, window->getSize().x, window->getSize().y);
-                window->setView(View(view));
+                sf::FloatRect view(0, 0, _window->getSize().x, _window->getSize().y);
+                _window->setView(View(view));
             }
             if (event.type == sf::Event::KeyPressed)
                 switch (event.key.code)
                 {
                 case sf::Keyboard::Escape:
-                    window->close();
+                    _window->close();
                     break;
                 case sf::Keyboard::Z:
                     setSelected(-1);
@@ -262,13 +262,13 @@ void Gui::displayMenu()
                     setSelected(1);
                     break;
                 case sf::Keyboard::Enter:
-                    if ((size_t)selected < cartes.size())
+                    if ((size_t)_selected < _mapFiles.size())
                     {
-                        reset(cartes[selected]);
+                        reset(_mapFiles[_selected]);
                         start();
                     }
                     else
-                        window->close();
+                        _window->close();
                     break;
                 default:
                     break;
@@ -279,24 +279,24 @@ void Gui::displayMenu()
 
 void Gui::setSelected(int i)
 {
-    selected = (selected + i);
-    if (selected < 0)
-        selected = cartes.size();
-    if ((size_t)selected > cartes.size())
-        selected = 0;
+    _selected = (_selected + i);
+    if (_selected < 0)
+        _selected = _mapFiles.size();
+    if ((size_t)_selected > _mapFiles.size())
+        _selected = 0;
 }
 
 bool Gui::step()
 {
     sf::Event event;
-    while (window->pollEvent(event))
+    while (_window->pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
-            window->close();
+            _window->close();
         if (event.type == sf::Event::Resized)
         {
-            sf::FloatRect view(0, 0, window->getSize().x, window->getSize().y);
-            window->setView(View(view));
+            sf::FloatRect view(0, 0, _window->getSize().x, _window->getSize().y);
+            _window->setView(View(view));
         }
         if (event.type == sf::Event::KeyPressed)
             switch (event.key.code)
@@ -309,15 +309,15 @@ bool Gui::step()
                 start();
                 break;
             case sf::Keyboard::Z:
-                return game->step('z');
+                return _game->step('z');
             case sf::Keyboard::S:
-                return game->step('s');
+                return _game->step('s');
             case sf::Keyboard::Q:
-                return game->step('q');
+                return _game->step('q');
             case sf::Keyboard::D:
-                return game->step('d');
+                return _game->step('d');
             case sf::Keyboard::Y:
-                return game->step('y');
+                return _game->step('y');
             default:
                 return false;
             }
@@ -327,19 +327,19 @@ bool Gui::step()
 
 void Gui::start()
 {
-    while (window->isOpen())
+    while (_window->isOpen())
     {
-        game->isGameOver();
-        window->clear();
+        _game->isGameOver();
+        _window->clear();
         drawMap();
 
         if (step())
-            game->decrementPM();
+            _game->decrementPM();
 
-        if (!game->isRunnig())
+        if (!_game->isRunnig())
             drawWinner();
 
-        window->display();
+        _window->display();
     }
 }
 

@@ -19,10 +19,10 @@ public:
 
     /* Méthodes héritées */
     bool element_action(Element *e);
-    bool isEmpty() { return false; }
+    bool isEmpty() const { return false; }
 
     /* Représentation (caractère pour l'instant) */
-    char getDraw();
+    char getDraw() const;
 
     /****************/
     bool estAdversaire(Guerrier *g);
@@ -54,8 +54,8 @@ public:
     void setCapDef(const int cD) { this->_capDef = cD; }
 
 private:
-    static std::vector<std::string> name_list;
-    static int name_list_index;
+    static std::vector<std::string> _name_list;
+    static int _name_list_index;
     int _hp;
     const std::string _name;
     const std::string _team;

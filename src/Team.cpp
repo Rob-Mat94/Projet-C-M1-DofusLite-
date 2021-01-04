@@ -12,16 +12,16 @@ void Team::removeGuerrier(Guerrier *g)
 
 Guerrier *Team::getCurrent()
 {
-    current = current % _list.size();
+    _current = _current % _list.size();
     if (_list.empty())
         return nullptr;
     auto it = _list.begin();
-    std::advance(it, current);
+    std::advance(it, _current);
     return *it;
 }
 
 void Team::increment()
 {
-    current++;
-    this->current = current % _list.size();
+    _current++;
+    this->_current = _current % _list.size();
 }

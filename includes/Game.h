@@ -24,15 +24,15 @@ public:
     // utilisée en cas d'affichage en terminal
     void start();
 
-    std::vector<std::vector<char>> getMap();
+    std::vector<std::vector<char>> getMap() const;
     Guerrier *getCurrent();
     Guerrier *getEnemy();
-    std::string getWinner();
+    std::string getWinner() const;
+    bool isRunnig() const;
+    int getHeight() const;
+    int getWidth() const;
     void increment();
     void isGameOver();
-    bool isRunnig();
-    int getHeight();
-    int getWidth();
     bool step(char key);
     void decrementPM();
 
@@ -43,19 +43,19 @@ private:
         Linux
     };
     static const OS MY_OS;
+    static const int PM = 4;
 
     Team *getCurrentTeam();
     auto getEmptyTeam();
     void deleteAll();
     bool step();
 
-    Carte *carte;
+    Carte *_carte;
     std::string _file;
-    std::map<std::string, Team *> teamList = {};
+    std::map<std::string, Team *> _teamList = {};
 
-    static const int PM = 4;
-    int currentTeam = 0, pm = Game::PM;
-    bool running = true;
+    int _currentTeam = 0, _pm = Game::PM;
+    bool _running = true;
 };
 
 #endif

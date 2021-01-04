@@ -7,12 +7,12 @@ bool EmptyElement ::element_action(Element *e)
     return false;
 }
 
-char EmptyElement::getDraw()
+char EmptyElement::getDraw() const
 {
     return ' ';
 }
 
-bool EmptyElement::isEmpty()
+bool EmptyElement::isEmpty() const
 {
     return true;
 }

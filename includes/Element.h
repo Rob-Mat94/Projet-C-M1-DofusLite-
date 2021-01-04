@@ -16,8 +16,8 @@ public:
     virtual void setPosition(const Position &pos);
     virtual const Position &getPosition() const;
     virtual bool element_action(Element *e) = 0;
-    virtual char getDraw() = 0;
-    virtual bool isEmpty() = 0;
+    virtual char getDraw() const = 0;
+    virtual bool isEmpty() const = 0;
 
 protected:
     Position _pos;

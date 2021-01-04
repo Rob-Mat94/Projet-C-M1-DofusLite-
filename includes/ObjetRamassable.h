@@ -11,10 +11,10 @@ public:
     ObjetRamassable(Position pos = Position(0, 0));
     virtual ~ObjetRamassable();
 
-    virtual void pickUpElement(Guerrier *g) = 0;
+    virtual void pickUpElement(Guerrier *g) const = 0;
 
     virtual bool element_action(Element *e);
-    virtual bool isEmpty() { return true; }
+    virtual bool isEmpty() const { return true; }
 };
 
 #endif

@@ -60,10 +60,12 @@ void Carte ::init_map(std::ifstream &f)
                 _game->addGuerrier(dynamic_cast<Guerrier *>(_map[y][x]));
                 break;
             case 'S':
-                addElement(new Sword(15, Position(x, y)));
+                // sword avec 30 points d'attaques en plus pour le guerrier
+                addElement(new Sword(30, Position(x, y)));
                 break;
             case 'A':
-                addElement(new Armor(20, Position(x, y)));
+                // armor avec 30 points de défence en plus pour le guerrier
+                addElement(new Armor(50, Position(x, y)));
                 break;
             case 'G':
                 addElement(new Guerrier("team 2", Position(x, y)));
@@ -116,7 +118,7 @@ void Carte::removeElement(Element *e)
     delete e;
 }
 
-bool Carte::canMove(Position oldPos, Position newPos)
+bool Carte::canMove(Position oldPos, Position newPos) const
 {
     int x(newPos.getPosX()), y(newPos.getPosY()),
         x2(oldPos.getPosX()), y2(oldPos.getPosY());
@@ -145,7 +147,7 @@ bool Carte::updatePos(Guerrier *g, Position oldPos, Position newPos)
     return true;
 }
 
-Guerrier *Carte::CheckEnemy(Guerrier *g)
+Guerrier *Carte::checkEnemy(Guerrier *g)
 {
     int x = g->getPosition().getPosX(),
         y = g->getPosition().getPosY();
@@ -165,7 +167,7 @@ Guerrier *Carte::CheckEnemy(Guerrier *g)
     return nullptr;
 }
 
-std::vector<std::vector<char>> Carte::getMap()
+std::vector<std::vector<char>> Carte::getMap() const
 {
     std::vector<std::vector<char>> map = {};
     for (auto l : _map)

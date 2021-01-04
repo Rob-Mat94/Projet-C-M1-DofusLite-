@@ -9,9 +9,9 @@ public:
     virtual ~Armor() = default;
 
     const int getStat() const { return _stat; }
-    char getDraw() { return 'A'; }
+    char getDraw() const { return 'A'; }
 
-    void pickUpElement(Guerrier *g);
+    void pickUpElement(Guerrier *g) const;
 
 private:
     const int _stat;

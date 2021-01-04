@@ -15,20 +15,20 @@ public:
     void launch();
 
 private:
-    void drawInformation(const Guerrier &g, int x, int y);
-    void drawCommandInformation(int x, int y);
-    void drawStat(int x, int y, char stat);
-    void drawText(std::string str, int x, int y);
-    void drawSprite(int x, int y, char c);
-    void drawMapBackground();
-    void drawMap();
-    void drawWinner();
-    void drawName();
-    void drawMenu();
+    void drawInformation(const Guerrier &g, int x, int y) const;
+    void drawCommandInformation(int x, int y) const;
+    void drawStat(int x, int y, char stat) const;
+    void drawText(std::string str, int x, int y) const;
+    void drawSprite(int x, int y, char c) const;
+    void drawMapBackground() const;
+    void drawMap() const;
+    void drawWinner() const;
+    void drawName() const;
+    void drawMenu() const;
 
-    void drawTitle();
+    void drawTitle() const;
     void displayMenu();
-    auto getItems();
+    auto getItems() const;
     void setSelected(int i);
     void start();
     bool step();
@@ -40,15 +40,15 @@ private:
     void reset();
     void reset(std::string file);
 
-    Game *game = nullptr;
-    sf::Font font;
-    sf::RenderWindow *window = nullptr;
-    std::map<char, sf::Texture> textures = {};
-    std::vector<std::string> cartes = {}, names = {};
-    int width = 500, height = 500;
-    float scale = 45.f;
-    float infoBarHeight = (1.3f * scale);
-    int selected = 0;
+    Game *_game = nullptr;
+    sf::Font _font;
+    sf::RenderWindow *_window = nullptr;
+    std::map<char, sf::Texture> _textures = {};
+    std::vector<std::string> _mapFiles = {}, _mapNames = {};
+    int _width = 500, _height = 500;
+    float _scale = 45.f;
+    float _infoBarHeight = (1.3f * _scale);
+    int _selected = 0;
 };
 
 #endif

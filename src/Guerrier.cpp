@@ -1,12 +1,12 @@
 #include "../includes/Guerrier.h"
 
-std::vector<std::string> Guerrier::name_list = {"Gareth", "Lancelot", "Arthur", "Perceval", "Leodagan", "Yvain", "Robert", "Sagremor"};
-int Guerrier::name_list_index = rand() % name_list.size();
+std::vector<std::string> Guerrier::_name_list = {"Gareth", "Lancelot", "Arthur", "Perceval", "Leodagan", "Yvain", "Robert", "Sagremor"};
+int Guerrier::_name_list_index = rand() % _name_list.size();
 
 Guerrier::Guerrier(const std::string team, Position pos, int hp, std::string name, int capAttack, int capDef)
-    : Element(pos), _hp(hp), _name(name_list[name_list_index]), _team(team), _capAttack(capAttack), _capDef(capDef)
+    : Element(pos), _hp(hp), _name(_name_list[_name_list_index]), _team(team), _capAttack(capAttack), _capDef(capDef)
 {
-    name_list_index = rand() % name_list.size();
+    _name_list_index = rand() % _name_list.size();
 }
 
 bool Guerrier::estAdversaire(Guerrier *g)
@@ -19,7 +19,7 @@ bool Guerrier::estAdversaire(Guerrier *g)
     return true;
 }
 
-char Guerrier::getDraw()
+char Guerrier::getDraw() const
 {
     if (_team == "team 1")
         return 'G';
@@ -43,7 +43,7 @@ bool Guerrier::move(Direction dir, Carte *carte)
 {
     Coordinate c = getDirCoordinate(dir);
     Position oldPos = this->_pos;
-    Position newPos = Position(_pos.getPosX() + c.x, _pos.getPosY() + c.y);
+    Position newPos = Position(_pos.getPosX() + c._x, _pos.getPosY() + c._y);
 
     if (carte->updatePos(this, oldPos, newPos))
     {
