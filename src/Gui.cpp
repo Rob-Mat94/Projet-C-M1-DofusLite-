@@ -268,6 +268,9 @@ void Gui::displayMenu()
                 case sf::Keyboard::S:
                     setSelected(1);
                     break;
+                case sf::Keyboard::P:
+                    setMusicPlayPause();
+                    break;
                 case sf::Keyboard::Enter:
                     if ((size_t)_selected < _mapFiles.size())
                     {
@@ -299,7 +302,7 @@ void Gui::setMusicPlayPause()
     {
     case sf::Music::Playing:
         music.pause();
-    default:
+    case sf::Music::Paused:
         music.play();
         break;
     }
