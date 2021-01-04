@@ -6,6 +6,7 @@ Gui::Gui()
 {
     initTextures();
     initWindow();
+    initMusic();
     initConfig();
 }
 
@@ -54,6 +55,13 @@ void Gui::initTextures()
 
     for (auto t : _textures)
         t.second.setSmooth(true);
+}
+
+void Gui::initMusic()
+{
+    if (!music.openFromFile("res/song.ogg"))
+        std::cout << "le fichier song.ogg est introuvable)";
+    music.setVolume(15);
 }
 
 void Gui::initSize()
@@ -286,6 +294,18 @@ void Gui::setSelected(int i)
         _selected = 0;
 }
 
+void Gui::setMusicPlayPause()
+{
+    switch (music.getStatus())
+    {
+    case sf::Music::Playing:
+        music.pause();
+    default:
+        music.play();
+        break;
+    }
+}
+
 bool Gui::step()
 {
     sf::Event event;
@@ -345,5 +365,6 @@ void Gui::start()
 
 void Gui::launch()
 {
+    setMusicPlayPause();
     displayMenu();
 }

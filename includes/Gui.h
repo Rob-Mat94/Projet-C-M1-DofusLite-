@@ -2,6 +2,7 @@
 #define GUI_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Game.h"
 
 class Gui
@@ -25,16 +26,17 @@ private:
     void drawWinner() const;
     void drawName() const;
     void drawMenu() const;
-
     void drawTitle() const;
-    void displayMenu();
     auto getItems() const;
+    void displayMenu();
     void setSelected(int i);
+    void setMusicPlayPause();
     void start();
     bool step();
 
     void initSize();
     void initTextures();
+    void initMusic();
     void initWindow();
     void initConfig();
     void reset();
@@ -43,6 +45,7 @@ private:
     Game *_game = nullptr;
     sf::Font _font;
     sf::RenderWindow *_window = nullptr;
+    sf::Music music;
     std::map<char, sf::Texture> _textures = {};
     std::vector<std::string> _mapFiles = {}, _mapNames = {};
     int _width = 500, _height = 500;
