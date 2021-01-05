@@ -40,7 +40,6 @@ void Gui::initWindow()
 {
     _font.loadFromFile("res/yoster.ttf");
     _window = new sf::RenderWindow(sf::VideoMode(_width, _height), "DofusLite");
-    _window->setPosition({0, 25});
 }
 
 void Gui::initTextures()
