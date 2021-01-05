@@ -16,6 +16,7 @@
 		Le joueur peut déplacer le guerrier actuel avec Z S Q D, lorsque vous êtes à proximité d'un guerrier ennemi vous pouvez appuyer sur Y pour l'attaquer
 		Dans l’interface graphique, il est possible de choisir la carte dans le menu et d’appuyer sur entrée pour commencer
 			* En jeu la touche R sert à recommencer la partie, la touche Esc à revenir dans le menu principal
+			* La touche P sert a mettre en pause/play la musique du jeu
 
 
 	Comment faire fonctionner le jeu :
