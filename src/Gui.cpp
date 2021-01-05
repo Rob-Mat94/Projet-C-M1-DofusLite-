@@ -59,7 +59,7 @@ void Gui::initTextures()
 
 void Gui::initMusic()
 {
-    if (!music.openFromFile("res/song.ogg"))
+    if (!_music.openFromFile("res/song.ogg"))
         std::cout << "le fichier song.ogg est introuvable)";
 }
 
@@ -246,7 +246,7 @@ void Gui::displayMenu()
     while (_window->isOpen())
     {
         // recommencer la musique si elle s'arrête
-        if (music.getStatus() == Music::Status::Stopped)
+        if (_music.getStatus() == Music::Status::Stopped)
             restartMusic();
 
         drawMenu();
@@ -302,27 +302,27 @@ void Gui::setSelected(int i)
 
 void Gui::setMusicPlayPause()
 {
-    switch (music.getStatus())
+    switch (_music.getStatus())
     {
     case sf::Music::Playing:
-        music.pause();
+        _music.pause();
         break;
     default:
-        music.play();
+        _music.play();
         break;
     }
 }
 
 void Gui::restartMusic()
 {
-    music.stop();
-    music.play();
+    _music.stop();
+    _music.play();
 }
 
 bool Gui::step()
 {
     // recommencer la musique si elle s'arrête
-    if (music.getStatus() == Music::Status::Stopped)
+    if (_music.getStatus() == Music::Status::Stopped)
         restartMusic();
 
     sf::Event event;
@@ -388,6 +388,6 @@ void Gui::start()
 
 void Gui::launch()
 {
-    music.play();
+    _music.play();
     displayMenu();
 }

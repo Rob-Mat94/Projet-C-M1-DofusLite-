@@ -27,27 +27,31 @@ private:
     void drawName() const;
     void drawMenu() const;
     void drawTitle() const;
-    auto getItems() const;
+
     void displayMenu();
-    void setSelected(int i);
     void setMusicPlayPause();
     void restartMusic();
-    void start();
-    bool step();
 
     void initSize();
     void initTextures();
     void initMusic();
     void initWindow();
     void initConfig();
-    void reset();
+
+    auto getItems() const;
+    void setSelected(int i);
     void reset(std::string file);
+    void reset();
+    void start();
+    bool step();
 
     Game *_game = nullptr;
-    sf::Font _font;
+
     sf::RenderWindow *_window = nullptr;
-    sf::Music music;
     std::map<char, sf::Texture> _textures = {};
+    sf::Font _font;
+    sf::Music _music;
+
     std::vector<std::string> _mapFiles = {}, _mapNames = {};
     int _width = 500, _height = 500;
     float _scale = 45.f;
