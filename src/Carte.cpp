@@ -123,7 +123,7 @@ bool Carte::canMove(Position oldPos, Position newPos) const
     int x(newPos.getPosX()), y(newPos.getPosY()),
         x2(oldPos.getPosX()), y2(oldPos.getPosY());
 
-    if (x >= _width || y >= _height || x2 >= _width || y2 >= _height)
+    if (x >= _width || y >= _height || x2 >= _width || y2 >= _height || x < 0 || y < 0 || x2 < 0 || y2 < 0)
         return false;
 
     return _map[y][x]->isEmpty();
@@ -152,16 +152,16 @@ Guerrier *Carte::checkEnemy(Guerrier *g)
     int x = g->getPosition().getPosX(),
         y = g->getPosition().getPosY();
 
-    if (g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y - 1][x])))
+    if (y - 1 >= 0 && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y - 1][x])))
         return dynamic_cast<Guerrier *>(this->_map[y - 1][x]);
 
-    else if (g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x + 1])))
+    else if (x + 1 < _width && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x + 1])))
         return dynamic_cast<Guerrier *>(this->_map[y][x + 1]);
 
-    else if (g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y + 1][x])))
+    else if (y + 1 < _height && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y + 1][x])))
         return dynamic_cast<Guerrier *>(this->_map[y + 1][x]);
 
-    else if (g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x - 1])))
+    else if (x - 1 >= 0 && g->estAdversaire(dynamic_cast<Guerrier *>(this->_map[y][x - 1])))
         return dynamic_cast<Guerrier *>(this->_map[y][x - 1]);
 
     return nullptr;
